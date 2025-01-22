@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
-import { DBProvider } from './db-connetion'
+import { StyleSheet, View } from 'react-native'
+import { DBProvider } from './db-provider'
 import { Home } from './home'
 
 export default function App() {

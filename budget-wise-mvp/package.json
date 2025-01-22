@@ -1,7 +1,7 @@
 {
   "name": "budget-wise-mvp",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -13,7 +13,8 @@
     "expo-status-bar": "~2.0.1",
     "react": "18.3.1",
     "react-native": "0.76.6",
-    "expo-sqlite": "~15.0.6"
+    "expo-sqlite": "~15.0.6",
+    "expo-localization": "~16.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

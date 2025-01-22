@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Button, Switch, Text, TextInput, View } from 'react-native'
 
-import { useDB } from './db-connetion'
+import { useDB } from './db-provider'
+import { AppDate } from './utils/app-date'
+import { AppMoney } from './utils/app-money'
 
 type Transactions = {
    id: number
@@ -29,11 +31,11 @@ export function Home() {
    }
 
    async function insert() {
-      const d = new Date(date)
+      const d = AppDate.createFromYearMonthDayString(date).unix
       await db.insert({
          type: type ? 0 : 1,
-         cents: value,
-         date: Math.floor(d.getTime() / 1000),
+         cents: AppMoney.create(value).cents,
+         date: d,
       })
       getTest()
    }
@@ -67,9 +69,13 @@ export function Home() {
                   }}
                >
                   <Text>{row.id}</Text>
-                  <Text>{row.type}</Text>
-                  <Text>{(row.cents / 100).toLocaleString()}</Text>
-                  <Text>{new Date(row.date * 1000).toLocaleDateString()}</Text>
+                  <Text>{row.type === 1 ? 'IN' : 'OUT'}</Text>
+                  <Text>
+                     {AppMoney.createFromCents(row.cents).toCurrency()}
+                  </Text>
+                  <Text>
+                     {AppDate.createFromUnixTimestamp(row.date).toShortDate()}
+                  </Text>
                </View>
             ))}
          </View>
@@ -84,9 +90,9 @@ export function Home() {
             </View>
             <Text>Value:</Text>
             <TextInput
-               value={value ? String(value / 100) : ''}
+               value={value.toFixed(2)}
                onChangeText={(txt) => {
-                  setValue(Number(txt.replace(/\D/g, '')))
+                  setValue(Number(txt.replace(/\D/g, '')) / 100)
                }}
                style={{ backgroundColor: '#ffffff' }}
                keyboardType="numeric"

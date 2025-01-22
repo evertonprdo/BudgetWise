@@ -1,6 +1,6 @@
 import * as SQLite from 'expo-sqlite'
 
-export class Transactions {
+export class TransactionsRepository {
    private constructor(private db: SQLite.SQLiteDatabase) {
       this.db.execAsync(`
          PRAGMA journal_mode = WAL;
@@ -18,9 +18,13 @@ export class Transactions {
       return this.db
    }
 
-   static async create(): Promise<Transactions> {
-      const db = await SQLite.openDatabaseAsync('budgetWise')
-      return new Transactions(db)
+   static async create(): Promise<TransactionsRepository> {
+      try {
+         const db = await SQLite.openDatabaseAsync('budgetWise')
+         return new TransactionsRepository(db)
+      } catch (error) {
+         throw error
+      }
    }
 
    async getTables() {
@@ -31,8 +35,12 @@ export class Transactions {
    }
 
    async getAll() {
-      const allRows = await this.db.getAllAsync('SELECT * FROM transactions')
-      return allRows
+      try {
+         const allRows = await this.db.getAllAsync('SELECT * FROM transactions')
+         return allRows
+      } catch (error) {
+         console.log(error)
+      }
    }
 
    async clear() {
@@ -40,10 +48,14 @@ export class Transactions {
    }
 
    async insert(props: { type: number; cents: number; date: number }) {
-      await this.db.runAsync(
-         'INSERT INTO transactions (type, cents, date) VALUES (?, ?, ?);',
-         [props.type, props.cents, props.date],
-      )
+      try {
+         await this.db.runAsync(
+            'INSERT INTO transactions (type, cents, date) VALUES (?, ?, ?);',
+            [props.type, props.cents, props.date],
+         )
+      } catch (error) {
+         console.log(error)
+      }
    }
 
    close() {

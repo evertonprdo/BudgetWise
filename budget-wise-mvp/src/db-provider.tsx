@@ -5,16 +5,16 @@ import {
    useEffect,
    useState,
 } from 'react'
-import { Transactions } from './db'
+import { TransactionsRepository } from './repositories/transactions.repository'
 
-const DbContext = createContext<Transactions | null>(null)
+const DbContext = createContext<TransactionsRepository | null>(null)
 
 export function DBProvider({ children }: PropsWithChildren) {
-   const [db, setDb] = useState<Transactions | null>(null)
+   const [db, setDb] = useState<TransactionsRepository | null>(null)
    const [isConnected, setIsConnected] = useState(false)
 
    useEffect(() => {
-      Transactions.create().then((conn) => {
+      TransactionsRepository.create().then((conn) => {
          setDb(conn)
          setIsConnected(true)
       })
