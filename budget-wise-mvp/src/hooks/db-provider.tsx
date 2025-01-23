@@ -5,7 +5,7 @@ import {
    useEffect,
    useState,
 } from 'react'
-import { TransactionsRepository } from './repositories/transactions.repository'
+import { TransactionsRepository } from '../repositories/transactions.repository'
 
 const DbContext = createContext<TransactionsRepository | null>(null)
 
