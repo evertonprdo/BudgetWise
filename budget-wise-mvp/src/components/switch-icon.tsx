@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import ArrowCircle from '../assets/icons/arrow-circle'
+import { colors } from '../theme'
 
 export function SwitchIcon() {
    return (
@@ -14,9 +15,9 @@ const s = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
       aspectRatio: '1/1',
-      // backgroundColor: '#ED5B5B',
+      backgroundColor: colors.red[500],
       borderRadius: 6,
-      backgroundColor: '#50e955',
-      // transform: [{ rotate: '180deg' }],
+      // backgroundColor: colors.lime[500],
+      transform: [{ rotate: '180deg' }],
    },
 })

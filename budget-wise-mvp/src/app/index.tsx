@@ -1,7 +1,9 @@
 import { StyleSheet, View } from 'react-native'
+
 import { Button } from '../components/button'
 import { SwitchIcon } from '../components/switch-icon'
 import { Select } from '../components/select'
+import { colors } from '../theme'
 
 export default function App() {
    return (
@@ -18,7 +20,7 @@ export default function App() {
 const s = StyleSheet.create({
    container: {
       flex: 1,
-      backgroundColor: '#fafafa',
+      backgroundColor: colors.zinc[100],
       justifyContent: 'center',
       paddingInline: 16,
       gap: 16,

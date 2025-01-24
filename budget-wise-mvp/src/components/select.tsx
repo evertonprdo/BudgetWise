@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
+import { colors, fonts } from '../theme'
 
 export function Select() {
    return (
@@ -19,9 +20,9 @@ const s = StyleSheet.create({
       justifyContent: 'space-between',
       padding: 16,
       borderRadius: 6,
-      borderColor: '#E3E3E3',
+      borderColor: colors.zinc[300],
       borderWidth: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.zinc[50],
    },
    icon: {
       backgroundColor: 'purple',
@@ -35,6 +36,7 @@ const s = StyleSheet.create({
       gap: 12,
    },
    text: {
+      fontFamily: fonts.family.regular,
       fontSize: 16,
    },
 })
