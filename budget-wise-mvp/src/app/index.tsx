@@ -1,15 +1,31 @@
-import { useState } from 'react'
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { useRef, useState } from 'react'
+import {
+   StyleSheet,
+   Text,
+   View,
+   ScrollView,
+   Modal,
+   Pressable,
+} from 'react-native'
+import { Calendar } from 'react-native-calendars'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { l10n } from '../libs/localization'
 
-import { colors, fonts } from '../theme'
-import { ArrowCircle, Calendar, CarrotUp } from '../assets/icons'
+import { colors, fonts, opacity } from '../theme'
+import {
+   ArrowCircle,
+   Calendar as IconCalendar,
+   CarrotUp,
+} from '../assets/icons'
 import { Button, Input, SwitchIcon, Select, TextArea } from '../components/ui'
+import { InputDate } from '@/components/input-date'
+import { AppDate } from '@/utils/app-date'
 
 export default function App() {
    const [selected, setSelected] = useState<string | null>(null)
+   const [showModal, setShowModal] = useState(false)
+   const [date, setDate] = useState<AppDate | null>(null)
 
    return (
       <SafeAreaView style={s.container}>
@@ -38,24 +54,12 @@ export default function App() {
                   </Select>
                </View>
 
-               <View style={s.iptLineWrapper}>
-                  <TextArea />
-               </View>
+               <TextArea />
 
-               <View style={s.iptLineWrapper}>
-                  <Input placeholder="Date" />
-                  <View
-                     style={{
-                        alignItems: 'center',
-                        backgroundColor: colors.zinc[100],
-                        justifyContent: 'center',
-                        aspectRatio: '1/1',
-                        borderRadius: 6,
-                     }}
-                  >
-                     <Calendar />
-                  </View>
-               </View>
+               <InputDate
+                  date={date}
+                  onDateChange={setDate}
+               />
 
                <View style={s.iptLineWrapper}>
                   <SwitchIcon />
@@ -89,6 +93,34 @@ export default function App() {
                </Button>
             </View>
          </ScrollView>
+         <Modal
+            visible={showModal}
+            transparent
+            statusBarTranslucent
+            animationType="slide"
+         >
+            <View
+               style={{
+                  flex: 1,
+                  justifyContent: 'flex-end',
+                  backgroundColor: `${colors.zinc[700]}${opacity[10]}`,
+                  padding: 16,
+               }}
+            >
+               <Pressable
+                  style={{
+                     height: 32,
+                     width: 32,
+                     borderRadius: 9999,
+                     backgroundColor: colors.red[400],
+                     alignSelf: 'flex-end',
+                     marginBottom: 16,
+                  }}
+                  onPress={() => setShowModal((value) => !value)}
+               />
+               <Calendar />
+            </View>
+         </Modal>
       </SafeAreaView>
    )
 }

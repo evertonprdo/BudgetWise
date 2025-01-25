@@ -29,4 +29,18 @@ export class AppDate {
          dateStyle: 'short',
       }).format(this._date)
    }
+
+   toFullDate() {
+      return new Intl.DateTimeFormat(this.locale, {
+         dateStyle: 'full',
+      }).format(this._date)
+   }
+
+   toYearMonthDayString() {
+      const year = this.date.getFullYear()
+      const month = String(this.date.getMonth() + 1).padStart(2, '0')
+      const day = String(this.date.getDate()).padStart(2, '0')
+
+      return `${year}-${String(month)}-${day}`
+   }
 }
