@@ -1,12 +1,8 @@
 import * as React from 'react'
-import Svg, { Path, SvgProps } from 'react-native-svg'
+import Svg, { Path } from 'react-native-svg'
+import { IconsProps } from './type'
 
-type Props = {
-   size?: number
-   color?: string
-} & Omit<SvgProps, 'height' | 'width' | 'color' | 'fill'>
-
-const ArrowCircle = ({ size, color, ...props }: Props) => (
+const ArrowCircle = ({ size, color, ...props }: IconsProps) => (
    <Svg
       width={size ?? 32}
       height={size ?? 32}
