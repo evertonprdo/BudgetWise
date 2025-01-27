@@ -1,12 +1,15 @@
 import { useState } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { useSharedValue } from 'react-native-reanimated'
 import { DateData } from 'react-native-calendars'
 
-import { Modal, Calendar, Button } from './ui'
+import { Box } from './box'
+import { Modal, Calendar, Button } from '../ui'
 import { colors, fonts, opacity } from '@/theme'
 import { Calendar as CalendarIcon } from '@/assets/icons'
 
 import { AppDate } from '@/utils/app-date'
+import { usePortal } from '@/contexts/portal-context'
 
 type Props = {
    date: AppDate | null
@@ -14,8 +17,8 @@ type Props = {
 }
 
 export function InputDate({ date, onDateChange }: Props) {
-   const [isPressed, setIsPressed] = useState(false)
-   const [isModalVisible, setIsModalVisible] = useState(false)
+   const portal = usePortal()
+   const isPressed = useSharedValue(false)
 
    const [marketDate, setMarketDate] = useState<string | undefined>(
       date?.toYearMonthDayString(),
@@ -32,17 +35,12 @@ export function InputDate({ date, onDateChange }: Props) {
    }
 
    function handleOnCancel() {
-      if (!marketDate || !date) return closeModal()
-
-      setMarketDate(date.toYearMonthDayString())
+      setMarketDate(date?.toYearMonthDayString())
       closeModal()
    }
 
-   const openModal = () => setIsModalVisible(true)
-   const closeModal = () => setIsModalVisible(false)
-
-   const handlePressIn = () => setIsPressed(true)
-   const handlePressOut = () => setIsPressed(false)
+   const handlePressIn = () => (isPressed.value = true)
+   const handlePressOut = () => (isPressed.value = false)
 
    const text = date
       ? date.toFullDate()
@@ -54,25 +52,11 @@ export function InputDate({ date, onDateChange }: Props) {
          : `${colors.zinc[800]}${opacity[75]}`,
    }
 
-   const borderColor = {
-      borderColor: isPressed ? colors.zinc[500] : 'transparent',
-   }
-
-   return (
-      <Pressable
-         onPress={openModal}
-         onPressIn={handlePressIn}
-         onPressOut={handlePressOut}
-         style={[s.container, borderColor]}
-      >
-         <Text style={[s.text, txtColor]}>{text}</Text>
-         <View style={s.icon}>
-            <CalendarIcon color={colors.zinc[800]} />
-         </View>
-
+   const closeModal = () => portal.setChildren(undefined)
+   function openModal() {
+      portal.setChildren(
          <Modal
             title="Calendar"
-            visible={isModalVisible}
             onClose={closeModal}
          >
             <Calendar
@@ -95,19 +79,26 @@ export function InputDate({ date, onDateChange }: Props) {
                   Confirm
                </Button>
             </View>
-         </Modal>
-      </Pressable>
+         </Modal>,
+      )
+   }
+
+   return (
+      <Box
+         isOnFocus={isPressed}
+         onPress={openModal}
+         onPressIn={handlePressIn}
+         onPressOut={handlePressOut}
+      >
+         <Text style={[s.text, txtColor]}>{text}</Text>
+         <View style={s.icon}>
+            <CalendarIcon color={colors.zinc[800]} />
+         </View>
+      </Box>
    )
 }
 
 const s = StyleSheet.create({
-   container: {
-      flexDirection: 'row',
-      gap: 8,
-      borderWidth: 1,
-      borderRadius: 6,
-      backgroundColor: colors.zinc[100],
-   },
    text: {
       flex: 1,
 

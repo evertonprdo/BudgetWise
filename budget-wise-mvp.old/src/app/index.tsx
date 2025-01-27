@@ -1,13 +1,5 @@
-import { useRef, useState } from 'react'
-import {
-   StyleSheet,
-   Text,
-   View,
-   ScrollView,
-   Modal,
-   Pressable,
-} from 'react-native'
-import { Calendar } from 'react-native-calendars'
+import { useState } from 'react'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { l10n } from '../libs/localization'
@@ -18,8 +10,10 @@ import {
    Calendar as IconCalendar,
    CarrotUp,
 } from '../assets/icons'
+
+import { InputDate } from '@/components/input'
 import { Button, Input, SwitchIcon, Select, TextArea } from '../components/ui'
-import { InputDate } from '@/components/input-date'
+
 import { AppDate } from '@/utils/app-date'
 
 export default function App() {
@@ -93,34 +87,6 @@ export default function App() {
                </Button>
             </View>
          </ScrollView>
-         <Modal
-            visible={showModal}
-            transparent
-            statusBarTranslucent
-            animationType="slide"
-         >
-            <View
-               style={{
-                  flex: 1,
-                  justifyContent: 'flex-end',
-                  backgroundColor: `${colors.zinc[700]}${opacity[10]}`,
-                  padding: 16,
-               }}
-            >
-               <Pressable
-                  style={{
-                     height: 32,
-                     width: 32,
-                     borderRadius: 9999,
-                     backgroundColor: colors.red[400],
-                     alignSelf: 'flex-end',
-                     marginBottom: 16,
-                  }}
-                  onPress={() => setShowModal((value) => !value)}
-               />
-               <Calendar />
-            </View>
-         </Modal>
       </SafeAreaView>
    )
 }
