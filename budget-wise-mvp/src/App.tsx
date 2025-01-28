@@ -6,7 +6,7 @@ import RubikRegular from '@root/assets/icons/RubikRegular.ttf'
 import RubikMedium from '@root/assets/icons/RubikMedium.ttf'
 import RubikSemiBold from '@root/assets/icons/RubikSemiBold.ttf'
 
-import { Index } from './screens'
+import { Router } from './contexts/router.context'
 
 export default function App() {
    const [loaded] = useFonts({
@@ -27,7 +27,7 @@ export default function App() {
             translucent
             style="dark"
          />
-         <Index />
+         <Router />
       </>
    )
 }

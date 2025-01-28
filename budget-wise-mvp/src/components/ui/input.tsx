@@ -28,13 +28,19 @@ export function Input({ onFocus, onBlur, style, ...props }: TextInputProps) {
       outputRange: [`${colors.zinc[500]}${opacity[0]}`, colors.zinc[500]],
    })
 
+   const containerStyle = StyleSheet.flatten([
+      s.container,
+      { borderColor },
+      style,
+   ])
+
    return (
-      <Animated.View style={[s.container, { borderColor }]}>
+      <Animated.View style={containerStyle}>
          <TextInput
             cursorColor={colors.zinc[800]}
             onFocus={handleOnFocus}
             onBlur={handleOnBlur}
-            style={[s.ipt, style]}
+            style={s.ipt}
             {...props}
          />
       </Animated.View>

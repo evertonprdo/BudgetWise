@@ -15,7 +15,8 @@
     "react-native": "0.76.6",
     "expo-font": "~13.0.3",
     "expo-localization": "~16.0.1",
-    "expo-sqlite": "~15.1.0"
+    "expo-sqlite": "~15.1.0",
+    "react-native-svg": "15.8.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

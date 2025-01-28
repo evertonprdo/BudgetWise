@@ -2,8 +2,11 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 
 import { colors } from '@/styles'
 import { Button, Input } from '@/components/ui'
+import { useNavigate } from '@/contexts/router.context'
 
 export function Index() {
+   const { navigate } = useNavigate()
+
    return (
       <ScrollView style={{ height: 500, backgroundColor: colors.zinc[200] }}>
          <View style={styles.container}>
@@ -17,7 +20,12 @@ export function Index() {
                >
                   Title
                </Button>
-               <Button style={{ flex: 1 }}>Title</Button>
+               <Button
+                  style={{ flex: 1 }}
+                  onPress={() => navigate('details')}
+               >
+                  Title
+               </Button>
             </View>
          </View>
       </ScrollView>

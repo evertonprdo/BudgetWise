@@ -1,4 +1,4 @@
-import type { IconComponent } from './type'
+import type { IconComponent } from './types'
 import ArrowCircle from './arrow-circle'
 import CarrotUp from './carrot-up'
 import Calendar from './calendar'

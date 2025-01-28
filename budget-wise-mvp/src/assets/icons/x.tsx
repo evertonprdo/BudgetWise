@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Svg, { Path } from 'react-native-svg'
-import { IconsProps } from './type'
+import { IconsProps } from './types'
 
 const X = ({ size, color, ...props }: IconsProps) => (
    <Svg
