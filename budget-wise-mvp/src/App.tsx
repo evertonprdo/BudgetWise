@@ -1,24 +1,33 @@
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
-import { Button } from './components/button'
+import { useFonts } from 'expo-font'
+
+import RubikBold from '@root/assets/icons/RubikBold.ttf'
+import RubikRegular from '@root/assets/icons/RubikRegular.ttf'
+import RubikMedium from '@root/assets/icons/RubikMedium.ttf'
+import RubikSemiBold from '@root/assets/icons/RubikSemiBold.ttf'
+
+import { Index } from './screens'
 
 export default function App() {
+   const [loaded] = useFonts({
+      RubikBold,
+      RubikMedium,
+      RubikRegular,
+      RubikSemiBold,
+   })
+
+   if (!loaded) {
+      return null
+   }
+
    return (
-      <View style={styles.container}>
-         <Button>
-            <Text>Title</Text>
-         </Button>
-         <Text>Open up App.tsx to start working on your app!</Text>
-         <StatusBar style="auto" />
-      </View>
+      <>
+         <StatusBar
+            backgroundColor="transparent"
+            translucent
+            style="dark"
+         />
+         <Index />
+      </>
    )
 }
-
-const styles = StyleSheet.create({
-   container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-   },
-})
