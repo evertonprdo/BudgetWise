@@ -1,6 +1,7 @@
-import { Triangle } from '@/assets/icons'
-import { colors, fonts } from '@/styles'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
+
+import { colors, fonts } from '@/styles'
+import { Triangle } from '@/assets/icons'
 
 type Props = {
    date: Date
@@ -60,15 +61,24 @@ const s = StyleSheet.create({
       alignItems: 'center',
       paddingVertical: 8,
    },
+
    title: {
       fontFamily: fonts.family.medium,
    },
-   options: { flexDirection: 'row', gap: 32 },
+
+   options: {
+      flexDirection: 'row',
+      gap: 32,
+   },
+
    icon: {
       height: 32,
       width: 32,
       justifyContent: 'center',
       alignItems: 'center',
    },
-   nextIcon: { transform: [{ rotate: '180deg' }] },
+
+   nextIcon: {
+      transform: [{ rotate: '180deg' }],
+   },
 })

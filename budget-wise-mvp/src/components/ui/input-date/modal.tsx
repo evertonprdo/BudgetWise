@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { forwardRef, useEffect, useImperativeHandle } from 'react'
 import {
    Text,
    View,
@@ -14,70 +14,83 @@ import {
 import { X } from '@/assets/icons'
 import { colors, fonts, opacity, sizes } from '@/styles'
 
+export type ModalRefProps = {
+   requestClose: () => void
+}
+
 type Props = {
    title?: string
    onRequestClose?: () => void
-} & Omit<ModalProps, 'onRequestClose'>
+} & Omit<ModalProps, 'onRequestClose' | 'ref'>
 
-export function Modal({ visible, children, onRequestClose, ...props }: Props) {
-   const fadeAnim = useAnimatedValue(0)
-   const slideAnim = useAnimatedValue(0)
+export const Modal = forwardRef<ModalRefProps, Props>(
+   ({ visible, children, onRequestClose, ...props }: Props, ref) => {
+      useImperativeHandle(ref, () => ({
+         requestClose: closeModal,
+      }))
 
-   const fadeIn = Animated.timing(fadeAnim, { toValue: 1, ...fadeConfig })
-   const fadeOut = Animated.timing(fadeAnim, { toValue: 0, ...fadeConfig })
+      const fadeAnim = useAnimatedValue(0)
+      const slideAnim = useAnimatedValue(0)
 
-   const slideIn = Animated.timing(slideAnim, { toValue: 1, ...slideConfig })
-   const slideOut = Animated.timing(slideAnim, { toValue: 0, ...slideConfig })
+      const fadeIn = Animated.timing(fadeAnim, { toValue: 1, ...fadeConfig })
+      const fadeOut = Animated.timing(fadeAnim, { toValue: 0, ...fadeConfig })
 
-   function closeModal() {
-      slideOut.start(() =>
-         fadeOut.start(() => onRequestClose && onRequestClose()),
-      )
-   }
+      const slideIn = Animated.timing(slideAnim, { toValue: 1, ...slideConfig })
+      const slideOut = Animated.timing(slideAnim, {
+         toValue: 0,
+         ...slideConfig,
+      })
 
-   useEffect(() => {
-      if (visible) fadeIn.start(() => slideIn.start())
-   }, [visible])
+      function closeModal() {
+         slideOut.start(() =>
+            fadeOut.start(() => onRequestClose && onRequestClose()),
+         )
+      }
 
-   const translateY = slideAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: [Screen.height, 0],
-   })
+      useEffect(() => {
+         if (visible) fadeIn.start(() => slideIn.start())
+      }, [visible])
 
-   const bgStyle = StyleSheet.compose(s.bg, { opacity: fadeAnim })
-   const containerStyle = StyleSheet.compose(s.container, {
-      transform: [{ translateY }],
-   })
+      const translateY = slideAnim.interpolate({
+         inputRange: [0, 1],
+         outputRange: [Screen.height, 0],
+      })
 
-   return (
-      <RNModal
-         visible={visible}
-         transparent
-         statusBarTranslucent
-         onRequestClose={closeModal}
-         {...props}
-      >
-         <Animated.View style={bgStyle}>
-            <Animated.View style={containerStyle}>
-               <View style={s.modal}>
-                  <View style={s.divider} />
+      const bgStyle = StyleSheet.compose(s.bg, { opacity: fadeAnim })
+      const containerStyle = StyleSheet.compose(s.container, {
+         transform: [{ translateY }],
+      })
 
-                  <View style={s.header}>
-                     <Text style={s.title}>Header</Text>
-                     <X
-                        onPress={closeModal}
-                        color={colors.zinc[500]}
-                        size={24}
-                     />
+      return (
+         <RNModal
+            visible={visible}
+            transparent
+            statusBarTranslucent
+            onRequestClose={closeModal}
+            {...props}
+         >
+            <Animated.View style={bgStyle}>
+               <Animated.View style={containerStyle}>
+                  <View style={s.modal}>
+                     <View style={s.divider} />
+
+                     <View style={s.header}>
+                        <Text style={s.title}>Header</Text>
+                        <X
+                           onPress={closeModal}
+                           color={colors.zinc[500]}
+                           size={24}
+                        />
+                     </View>
+
+                     {children}
                   </View>
-
-                  {children}
-               </View>
+               </Animated.View>
             </Animated.View>
-         </Animated.View>
-      </RNModal>
-   )
-}
+         </RNModal>
+      )
+   },
+)
 
 const Screen = Dimensions.get('screen')
 

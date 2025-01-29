@@ -17,7 +17,6 @@ export function Index() {
                <Button
                   style={{ flex: 1 }}
                   variant="secondary"
-                  onPress={() => navigate('calendar')}
                >
                   Title
                </Button>

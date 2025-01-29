@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
-import { Modal } from './modal'
-import { Button } from '../button'
-import { Calendar as CalendarIcon } from '@/assets/icons'
 import { colors, fonts, sizes } from '@/styles'
+import { Calendar as CalendarIcon } from '@/assets/icons'
+
+import { Button } from '../button'
+import { Modal, ModalRefProps } from './modal'
+import { Calendar } from '@/components/calendar'
 
 import { AppDate } from '@/utils/app-date'
-import { Calendar } from '@/components/calendar'
 
 type Props = {
    appDate?: AppDate | null
@@ -18,6 +19,8 @@ export function InputDate({ appDate, onDateChange }: Props) {
    const [marketDate, setMarketDate] = useState<Date | null>()
    const [showCalendar, setShowCalendar] = useState(false)
 
+   const modalRef = useRef<ModalRefProps>(null)
+
    const openCalendar = () => setShowCalendar(true)
    const closeCalendar = () => setShowCalendar(false)
 
@@ -26,20 +29,22 @@ export function InputDate({ appDate, onDateChange }: Props) {
    }
 
    function handleOnCancel() {
-      if (!marketDate || !appDate) return closeCalendar()
+      if (!marketDate || !appDate) return modalRef.current?.requestClose()
 
       setMarketDate(appDate.date)
-      closeCalendar()
+      modalRef.current?.requestClose()
    }
 
    function dispatchOnDateChange() {
       if (!onDateChange) return
-      if (!marketDate) return closeCalendar()
+      if (!marketDate) return modalRef.current?.requestClose()
 
       const appDate = AppDate.create(marketDate)
       onDateChange(appDate)
-      closeCalendar()
+      modalRef.current?.requestClose()
    }
+
+   const textStyle = StyleSheet.compose(s.ipt, { opacity: appDate ? 1 : 0.5 })
 
    return (
       <>
@@ -47,13 +52,16 @@ export function InputDate({ appDate, onDateChange }: Props) {
             onPress={openCalendar}
             style={s.container}
          >
-            <Text style={s.ipt}>{appDate && appDate.toFullDate()}</Text>
+            <Text style={textStyle}>
+               {appDate ? appDate.toFullDate() : AppDate.create().toFullDate()}
+            </Text>
             <CalendarIcon />
          </Pressable>
 
          <Modal
             visible={showCalendar}
             onRequestClose={closeCalendar}
+            ref={modalRef}
          >
             <Calendar
                marketDate={marketDate}
