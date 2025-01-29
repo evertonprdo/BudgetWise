@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { useState } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 
 import { colors, fonts, sizes } from '@/styles'
 import { Calendar as CalendarIcon } from '@/assets/icons'
@@ -7,6 +7,7 @@ import { Calendar as CalendarIcon } from '@/assets/icons'
 import { Button } from '../button'
 import { Modal } from './modal'
 import { Calendar } from '@/components/calendar'
+import { FocusableBox } from '../focusable-box'
 
 import { AppDate } from '@/utils/app-date'
 
@@ -46,15 +47,19 @@ export function InputDate({ appDate, onDateChange }: Props) {
 
    return (
       <>
-         <Pressable
+         <FocusableBox
+            focused={showCalendar}
             onPress={openCalendar}
-            style={s.container}
          >
-            <Text style={textStyle}>
+            <Text
+               style={textStyle}
+               numberOfLines={1}
+               ellipsizeMode="tail"
+            >
                {appDate ? appDate.toFullDate() : AppDate.create().toFullDate()}
             </Text>
             <CalendarIcon />
-         </Pressable>
+         </FocusableBox>
 
          <Modal
             visible={showCalendar}
@@ -86,19 +91,6 @@ export function InputDate({ appDate, onDateChange }: Props) {
 }
 
 const s = StyleSheet.create({
-   container: {
-      flexDirection: 'row',
-      alignItems: 'center',
-
-      paddingHorizontal: 16,
-      gap: 8,
-
-      backgroundColor: colors.zinc[100],
-
-      borderWidth: 1,
-      borderColor: colors.zinc[300],
-      borderRadius: sizes.radius.md,
-   },
    ipt: {
       flex: 1,
       height: sizes.height.md,
@@ -108,10 +100,12 @@ const s = StyleSheet.create({
       fontSize: fonts.size.sm,
       fontFamily: fonts.family.regular,
    },
+
    btnWrapper: {
       flexDirection: 'row',
       gap: 8,
       marginTop: 32,
    },
+
    btn: { flex: 1 },
 })

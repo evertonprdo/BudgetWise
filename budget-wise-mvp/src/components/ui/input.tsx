@@ -1,41 +1,17 @@
-import {
-   Animated,
-   Easing,
-   StyleSheet,
-   TextInput,
-   TextInputProps,
-   useAnimatedValue,
-} from 'react-native'
-import { colors, fonts, opacity, sizes } from '@/styles'
+import { useState } from 'react'
+import { StyleSheet, TextInput, TextInputProps } from 'react-native'
+
+import { colors, fonts, sizes } from '@/styles'
+import { FocusableBox } from './focusable-box'
 
 export function Input({ onFocus, onBlur, style, ...props }: TextInputProps) {
-   const fadeAnim = useAnimatedValue(0)
+   const [focused, setFocused] = useState(false)
 
-   function easeOut(toValue: number) {
-      Animated.timing(fadeAnim, {
-         toValue,
-         duration: 300,
-         easing: Easing.out(Easing.ease),
-         useNativeDriver: true,
-      }).start()
-   }
-
-   const handleOnFocus = () => easeOut(1)
-   const handleOnBlur = () => easeOut(0)
-
-   const borderColor = fadeAnim.interpolate({
-      inputRange: [0, 1],
-      outputRange: [`${colors.zinc[500]}${opacity[0]}`, colors.zinc[500]],
-   })
-
-   const containerStyle = StyleSheet.flatten([
-      s.container,
-      { borderColor },
-      style,
-   ])
+   const handleOnFocus = () => setFocused(true)
+   const handleOnBlur = () => setFocused(false)
 
    return (
-      <Animated.View style={containerStyle}>
+      <FocusableBox focused={focused}>
          <TextInput
             cursorColor={colors.zinc[800]}
             onFocus={handleOnFocus}
@@ -43,24 +19,11 @@ export function Input({ onFocus, onBlur, style, ...props }: TextInputProps) {
             style={s.ipt}
             {...props}
          />
-      </Animated.View>
+      </FocusableBox>
    )
 }
 
 const s = StyleSheet.create({
-   container: {
-      flexDirection: 'row',
-      alignItems: 'center',
-
-      paddingHorizontal: 16,
-      gap: 8,
-
-      backgroundColor: colors.zinc[100],
-
-      borderWidth: 1,
-      borderColor: colors.zinc[300],
-      borderRadius: sizes.radius.md,
-   },
    ipt: {
       flex: 1,
       height: sizes.height.md,

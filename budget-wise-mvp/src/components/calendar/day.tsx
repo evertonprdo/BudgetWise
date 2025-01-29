@@ -44,6 +44,7 @@ const s = StyleSheet.create({
       aspectRatio: '1/1',
       margin: 4,
 
+      color: colors.zinc[800],
       fontFamily: fonts.family.regular,
       fontSize: fonts.size.sm,
       textAlign: 'center',
