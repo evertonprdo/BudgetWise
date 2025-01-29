@@ -5,7 +5,7 @@ import { colors, fonts, sizes } from '@/styles'
 import { Calendar as CalendarIcon } from '@/assets/icons'
 
 import { Button } from '../button'
-import { Modal, ModalRefProps } from './modal'
+import { Modal } from './modal'
 import { Calendar } from '@/components/calendar'
 
 import { AppDate } from '@/utils/app-date'
@@ -19,8 +19,6 @@ export function InputDate({ appDate, onDateChange }: Props) {
    const [marketDate, setMarketDate] = useState<Date | null>()
    const [showCalendar, setShowCalendar] = useState(false)
 
-   const modalRef = useRef<ModalRefProps>(null)
-
    const openCalendar = () => setShowCalendar(true)
    const closeCalendar = () => setShowCalendar(false)
 
@@ -29,19 +27,19 @@ export function InputDate({ appDate, onDateChange }: Props) {
    }
 
    function handleOnCancel() {
-      if (!marketDate || !appDate) return modalRef.current?.requestClose()
+      if (!marketDate || !appDate) return closeCalendar()
 
       setMarketDate(appDate.date)
-      modalRef.current?.requestClose()
+      closeCalendar()
    }
 
    function dispatchOnDateChange() {
       if (!onDateChange) return
-      if (!marketDate) return modalRef.current?.requestClose()
+      if (!marketDate) return closeCalendar()
 
       const appDate = AppDate.create(marketDate)
       onDateChange(appDate)
-      modalRef.current?.requestClose()
+      closeCalendar()
    }
 
    const textStyle = StyleSheet.compose(s.ipt, { opacity: appDate ? 1 : 0.5 })
@@ -61,7 +59,6 @@ export function InputDate({ appDate, onDateChange }: Props) {
          <Modal
             visible={showCalendar}
             onRequestClose={closeCalendar}
-            ref={modalRef}
          >
             <Calendar
                marketDate={marketDate}
