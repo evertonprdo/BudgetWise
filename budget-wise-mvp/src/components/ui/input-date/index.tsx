@@ -3,21 +3,43 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { Modal } from './modal'
 import { Button } from '../button'
-import { Calendar } from '@/assets/icons'
+import { Calendar as CalendarIcon } from '@/assets/icons'
 import { colors, fonts, sizes } from '@/styles'
 
 import { AppDate } from '@/utils/app-date'
+import { Calendar } from '@/components/calendar'
 
 type Props = {
-   date?: AppDate | null
+   appDate?: AppDate | null
    onDateChange?: (date: AppDate) => void
 }
 
-export function InputDate({ date, onDateChange }: Props) {
+export function InputDate({ appDate, onDateChange }: Props) {
+   const [marketDate, setMarketDate] = useState<Date | null>()
    const [showCalendar, setShowCalendar] = useState(false)
 
    const openCalendar = () => setShowCalendar(true)
    const closeCalendar = () => setShowCalendar(false)
+
+   function handleOnDayPress(date: Date) {
+      setMarketDate(date)
+   }
+
+   function handleOnCancel() {
+      if (!marketDate || !appDate) return closeCalendar()
+
+      setMarketDate(appDate.date)
+      closeCalendar()
+   }
+
+   function dispatchOnDateChange() {
+      if (!onDateChange) return
+      if (!marketDate) return closeCalendar()
+
+      const appDate = AppDate.create(marketDate)
+      onDateChange(appDate)
+      closeCalendar()
+   }
 
    return (
       <>
@@ -25,24 +47,33 @@ export function InputDate({ date, onDateChange }: Props) {
             onPress={openCalendar}
             style={s.container}
          >
-            <Text style={s.ipt}>11 Jan 2025</Text>
-            <Calendar />
+            <Text style={s.ipt}>{appDate && appDate.toFullDate()}</Text>
+            <CalendarIcon />
          </Pressable>
 
          <Modal
             visible={showCalendar}
             onRequestClose={closeCalendar}
          >
-            <View style={s.calendar} />
+            <Calendar
+               marketDate={marketDate}
+               onDayPress={handleOnDayPress}
+            />
 
             <View style={s.btnWrapper}>
                <Button
-                  style={s.btn}
+                  onPress={handleOnCancel}
                   variant="secondary"
+                  style={s.btn}
                >
                   Cancel
                </Button>
-               <Button style={s.btn}>Confirm</Button>
+               <Button
+                  onPress={dispatchOnDateChange}
+                  style={s.btn}
+               >
+                  Confirm
+               </Button>
             </View>
          </Modal>
       </>
@@ -72,13 +103,10 @@ const s = StyleSheet.create({
       fontSize: fonts.size.sm,
       fontFamily: fonts.family.regular,
    },
-   calendar: {
-      height: 300,
-      width: '100%',
-      backgroundColor: colors.zinc[300],
-      borderRadius: 6,
-      marginBottom: 32,
+   btnWrapper: {
+      flexDirection: 'row',
+      gap: 8,
+      marginTop: 32,
    },
-   btnWrapper: { flexDirection: 'row', gap: 8 },
    btn: { flex: 1 },
 })

@@ -3,10 +3,12 @@ import { BackHandler } from 'react-native'
 
 import { Index } from '@/screens'
 import { Details } from '@/screens/details'
+import { ScreenCalendar } from '@/screens/calendar'
 
 const Screens = {
    index: Index,
    details: Details,
+   calendar: ScreenCalendar,
 } as const
 
 const RouterContext = createContext<{

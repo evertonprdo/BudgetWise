@@ -10,9 +10,16 @@ export class AppDate {
    get unix() {
       return Math.floor(this._date.getTime() / 1000)
    }
+   get daysInMonth() {
+      return new Date(
+         this._date.getFullYear(),
+         this._date.getMonth() + 1,
+         0,
+      ).getDate()
+   }
 
-   static create(date: Date) {
-      return new AppDate(date)
+   static create(date?: Date) {
+      return new AppDate(date ?? new Date())
    }
 
    static createFromYearMonthDayString(str: string) {
