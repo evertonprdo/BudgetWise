@@ -3,15 +3,24 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 
 import { colors } from '@/styles'
 import { Calendar, Triangle, X } from '@/assets/icons'
-import { Button, InputCurrency, InputDate, Select } from '@/components/ui'
+import {
+   Button,
+   InputArea,
+   InputCurrency,
+   InputDate,
+   Select,
+} from '@/components/ui'
 
-import { AppMoney } from '@/utils/app-money'
 import { useNavigate } from '@/contexts/router.context'
+import { InOutButton } from '@/components/in-out-button'
+import { NumericKeyboardProvider } from '@/contexts/numeric-keyboard'
 
 export function Index() {
    const { navigate } = useNavigate()
+
    const [selected, setSelected] = useState<string | null>(null)
-   const [curr, setCurr] = useState<AppMoney | null>(null)
+   const [curr, setCurr] = useState<number | null>(null)
+   const [status, setStatus] = useState(false)
 
    const options = [
       {
@@ -35,49 +44,68 @@ export function Index() {
    ]
 
    return (
-      <ScrollView style={{ flex: 1, backgroundColor: colors.zinc[200] }}>
-         <View style={styles.container}>
-            <Select
-               options={options}
-               selected={selected}
-               onChangeSelected={setSelected}
-            />
+      <NumericKeyboardProvider>
+         <ScrollView style={{ flex: 1, backgroundColor: colors.zinc[200] }}>
+            <View style={s.container}>
+               <Select
+                  options={options}
+                  selected={selected}
+                  onChangeSelected={setSelected}
+               />
 
-            <InputDate />
+               <InputArea />
 
-            <InputCurrency
-               value={curr}
-               onChangeText={setCurr}
-            />
+               <InputDate />
 
-            <View
-               style={{ flexDirection: 'row', flex: 1, gap: 8, marginTop: 8 }}
-            >
-               <Button
-                  style={{ flex: 1 }}
-                  variant="secondary"
+               <View style={{ flexDirection: 'row', gap: 8 }}>
+                  <InOutButton
+                     isIn={status}
+                     onValueChange={setStatus}
+                  />
+                  <InputCurrency
+                     value={curr}
+                     onChangeNumber={setCurr}
+                     style={s.flex}
+                  />
+               </View>
+
+               <View
+                  style={{
+                     flexDirection: 'row',
+                     flex: 1,
+                     gap: 8,
+                     marginTop: 8,
+                  }}
                >
-                  Cancel
-               </Button>
-               <Button
-                  style={{ flex: 1 }}
-                  onPress={() => navigate('details')}
-               >
-                  Confirm
-               </Button>
+                  <Button
+                     style={{ flex: 1 }}
+                     variant="secondary"
+                  >
+                     Cancel
+                  </Button>
+                  <Button
+                     style={{ flex: 1 }}
+                     onPress={() => navigate('details')}
+                  >
+                     Confirm
+                  </Button>
+               </View>
             </View>
-         </View>
-      </ScrollView>
+         </ScrollView>
+      </NumericKeyboardProvider>
    )
 }
 
-const styles = StyleSheet.create({
+const s = StyleSheet.create({
    container: {
-      marginTop: 300,
+      marginTop: 800,
       flex: 1,
       gap: 16,
 
       justifyContent: 'center',
-      paddingHorizontal: 32,
+      padding: 32,
+   },
+   flex: {
+      flex: 1,
    },
 })

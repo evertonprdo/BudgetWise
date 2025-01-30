@@ -1,6 +1,3 @@
-import { ArrowBarToRight, Backspace } from '@/assets/icons'
-import { colors, fonts, opacity, sizes } from '@/styles'
-import React, { useEffect } from 'react'
 import {
    View,
    Text,
@@ -9,10 +6,14 @@ import {
    Pressable,
    useAnimatedValue,
    Easing,
+   ViewProps,
 } from 'react-native'
 
+import { colors, fonts, opacity, sizes } from '@/styles'
+import { ArrowBarToRight, Backspace } from '@/assets/icons'
+
 // prettier-ignore
-const grafo = [
+const inputKeys = [
    1,    2,    3,    null,
    4,    5,    6,    null,
    7,    8,    9,    'backspace',
@@ -20,18 +21,30 @@ const grafo = [
 ]
 
 type Props = {
-   onKeyPress: (num: string | number) => void
-}
+   onKeyPress: (num: string) => void
+} & ViewProps
 
-export function NumericKeyboard({ onKeyPress: onPress }: Props) {
-   const handleOnPress = (value: string | number) => onPress(value)
+export function NumericKeyboard({
+   onKeyPress: onPress,
+   style,
+   ...props
+}: Props) {
+   const handleOnPress = (value: string | number) => onPress(String(value))
+
+   const containerStyle = StyleSheet.compose(s.container, style)
 
    return (
-      <View style={s.container}>
-         {grafo.map((value) => (
-            <View style={s.numBox}>
+      <View
+         style={containerStyle}
+         {...props}
+      >
+         {inputKeys.map((key, i) => (
+            <View
+               key={key ?? `Null_${i}`}
+               style={s.numBox}
+            >
                <AnimNumericKey
-                  value={value}
+                  value={key}
                   onPress={handleOnPress}
                />
             </View>
@@ -72,10 +85,15 @@ function AnimNumericKey({ value, onPress }: NumericKeyProps) {
       outputRange: isConfirmKey ? hoverConfirmKeyBg : hoverNumericKeyBg,
    })
 
+   const scale = hoverAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [1, 0.9],
+   })
+
    const numBoxStyle = StyleSheet.flatten([
       s.btn,
-      { backgroundColor },
-      isConfirmKey && { borderRadius: sizes.radius.full },
+      { backgroundColor, transform: [{ scale }] },
+      isConfirmKey && { borderRadius: sizes.radius.full, margin: 4 },
    ])
 
    const Children = () => {
@@ -136,7 +154,7 @@ const s = StyleSheet.create({
    numBox: {
       width: '25%',
       aspectRatio: 1.5,
-      padding: 8,
+      padding: 4,
    },
 
    btn: {

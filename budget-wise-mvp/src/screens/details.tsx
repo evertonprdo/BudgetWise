@@ -1,14 +1,12 @@
+import { useState } from 'react'
 import { Text, View } from 'react-native'
 
 import { InputCurrency } from '@/components/ui'
 import { useNavigate } from '@/contexts/router.context'
-import { useState } from 'react'
-
-import { AppMoney } from '@/utils/app-money'
 
 export function Details() {
    const { navigate } = useNavigate()
-   const [value, setValue] = useState<AppMoney | null>(null)
+   const [value, setValue] = useState<number | null>(null)
 
    return (
       <View
@@ -23,7 +21,7 @@ export function Details() {
 
          <InputCurrency
             value={value}
-            onChangeText={setValue}
+            onChangeNumber={setValue}
          />
       </View>
    )

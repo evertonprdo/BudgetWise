@@ -1,22 +1,38 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { StyleSheet, TextInput, TextInputProps } from 'react-native'
 
-import { colors, fonts, sizes } from '@/styles'
+import { colors, fonts } from '@/styles'
 import { FocusableBox } from './focusable-box'
 
-export function Input({ onFocus, onBlur, style, ...props }: TextInputProps) {
+export function InputArea({
+   onFocus,
+   onBlur,
+   style,
+   ...props
+}: TextInputProps) {
    const [focused, setFocused] = useState(false)
+   const iptRef = useRef<TextInput>(null)
 
    const handleOnFocus = () => setFocused(true)
    const handleOnBlur = () => setFocused(false)
+   const onPressBox = () => {
+      iptRef.current?.focus()
+   }
 
    return (
-      <FocusableBox focused={focused}>
+      <FocusableBox
+         focused={focused}
+         onPress={onPressBox}
+      >
          <TextInput
+            ref={iptRef}
+            placeholder="Description"
             cursorColor={colors.zinc[800]}
             onFocus={handleOnFocus}
             onBlur={handleOnBlur}
             style={s.ipt}
+            textAlignVertical="top"
+            multiline
             {...props}
          />
       </FocusableBox>
@@ -26,8 +42,7 @@ export function Input({ onFocus, onBlur, style, ...props }: TextInputProps) {
 const s = StyleSheet.create({
    ipt: {
       flex: 1,
-      height: sizes.height.md,
-
+      height: 125,
       color: colors.zinc[800],
       fontSize: fonts.size.sm,
       fontFamily: fonts.family.regular,
