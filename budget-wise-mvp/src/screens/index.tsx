@@ -13,7 +13,6 @@ import {
 
 import { useNavigate } from '@/contexts/router.context'
 import { InOutButton } from '@/components/in-out-button'
-import { NumericKeyboardProvider } from '@/contexts/numeric-keyboard'
 
 export function Index() {
    const { navigate } = useNavigate()
@@ -44,61 +43,59 @@ export function Index() {
    ]
 
    return (
-      <NumericKeyboardProvider>
-         <ScrollView style={{ flex: 1, backgroundColor: colors.zinc[200] }}>
-            <View style={s.container}>
-               <Select
-                  options={options}
-                  selected={selected}
-                  onChangeSelected={setSelected}
+      <ScrollView style={{ flex: 1, backgroundColor: colors.zinc[200] }}>
+         <View style={s.container}>
+            <Select
+               options={options}
+               selected={selected}
+               onChangeSelected={setSelected}
+            />
+
+            <InputArea />
+
+            <InputDate />
+
+            <View style={{ flexDirection: 'row', gap: 8 }}>
+               <InOutButton
+                  isIn={status}
+                  onValueChange={setStatus}
                />
-
-               <InputArea />
-
-               <InputDate />
-
-               <View style={{ flexDirection: 'row', gap: 8 }}>
-                  <InOutButton
-                     isIn={status}
-                     onValueChange={setStatus}
-                  />
-                  <InputCurrency
-                     value={curr}
-                     onChangeNumber={setCurr}
-                     style={s.flex}
-                  />
-               </View>
-
-               <View
-                  style={{
-                     flexDirection: 'row',
-                     flex: 1,
-                     gap: 8,
-                     marginTop: 8,
-                  }}
-               >
-                  <Button
-                     style={{ flex: 1 }}
-                     variant="secondary"
-                  >
-                     Cancel
-                  </Button>
-                  <Button
-                     style={{ flex: 1 }}
-                     onPress={() => navigate('details')}
-                  >
-                     Confirm
-                  </Button>
-               </View>
+               <InputCurrency
+                  value={curr}
+                  onChangeNumber={setCurr}
+                  style={s.flex}
+               />
             </View>
-         </ScrollView>
-      </NumericKeyboardProvider>
+
+            <View
+               style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  gap: 8,
+                  marginTop: 8,
+               }}
+            >
+               <Button
+                  style={{ flex: 1 }}
+                  variant="secondary"
+               >
+                  Cancel
+               </Button>
+               <Button
+                  style={{ flex: 1 }}
+                  onPress={() => navigate('details')}
+               >
+                  Confirm
+               </Button>
+            </View>
+         </View>
+      </ScrollView>
    )
 }
 
 const s = StyleSheet.create({
    container: {
-      marginTop: 800,
+      marginTop: 200,
       flex: 1,
       gap: 16,
 

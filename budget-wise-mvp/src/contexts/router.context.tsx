@@ -3,6 +3,7 @@ import { BackHandler } from 'react-native'
 
 import { Index } from '@/screens'
 import { Details } from '@/screens/details'
+import { NumericKeyboardProvider } from './numeric-keyboard'
 
 const Screens = {
    index: Index,
@@ -48,7 +49,9 @@ export function Router() {
    const RenderScreen = Screens[stack[stack.length - 1]]
    return (
       <RouterContext.Provider value={{ navigate }}>
-         <RenderScreen />
+         <NumericKeyboardProvider>
+            <RenderScreen />
+         </NumericKeyboardProvider>
       </RouterContext.Provider>
    )
 }

@@ -16,6 +16,7 @@ import { NumericKeyboard } from './custom-keyboard'
 
 import { l10n } from '@/libs/localization'
 import { AppMoney } from '@/utils/app-money'
+import { useNumericKeyboard } from '@/contexts/numeric-keyboard'
 
 type Props = {
    value?: number | null
@@ -24,10 +25,10 @@ type Props = {
 }
 
 export function InputCurrency({ value, onChangeNumber, style }: Props) {
-   const [showModal, setShowModal] = useState(false)
+   const { visible, hideKeyboard, showKeyboard } = useNumericKeyboard()
 
-   const openModal = () => setShowModal(true)
-   const closeModal = () => setShowModal(false)
+   const openModal = () => showKeyboard()
+   const closeModal = () => hideKeyboard()
 
    function handleOnKeyPress(key: string) {
       if (!onChangeNumber) return
@@ -47,7 +48,6 @@ export function InputCurrency({ value, onChangeNumber, style }: Props) {
    }
 
    const blinkAnim = useAnimatedValue(0)
-
    useEffect(() => {
       const loop = Animated.loop(
          Animated.sequence([
@@ -66,7 +66,7 @@ export function InputCurrency({ value, onChangeNumber, style }: Props) {
          ]),
       )
 
-      if (showModal) {
+      if (visible) {
          loop.start()
       } else {
          loop.stop()
@@ -78,7 +78,7 @@ export function InputCurrency({ value, onChangeNumber, style }: Props) {
       }
 
       return () => loop.stop()
-   }, [showModal])
+   }, [visible])
 
    const iptStyle = StyleSheet.flatten([s.text, !value && { opacity: 0.5 }])
    const carrotStyle = StyleSheet.flatten([s.carrot, { opacity: blinkAnim }])
@@ -88,36 +88,18 @@ export function InputCurrency({ value, onChangeNumber, style }: Props) {
       : `0${l10n.decimalSeparator}00`
 
    return (
-      <>
-         <FocusableBox
-            focused={showModal}
-            onPress={openModal}
-            style={style}
-         >
-            <Text style={s.text}>{l10n.currencySymbol}</Text>
+      <FocusableBox
+         focused={visible}
+         onPress={openModal}
+         style={style}
+      >
+         <Text style={s.text}>{l10n.currencySymbol}</Text>
 
-            <View style={s.iptInnerContainer}>
-               <Text style={iptStyle}>{iptValue}</Text>
-               <Animated.View style={carrotStyle} />
-            </View>
-         </FocusableBox>
-
-         <Modal
-            visible={showModal}
-            onRequestClose={closeModal}
-            animationType="slide"
-            transparent
-         >
-            <Pressable
-               onPress={closeModal}
-               style={s.closeArea}
-            />
-            <NumericKeyboard
-               onKeyPress={handleOnKeyPress}
-               style={s.modalContent}
-            />
-         </Modal>
-      </>
+         <View style={s.iptInnerContainer}>
+            <Text style={iptStyle}>{iptValue}</Text>
+            <Animated.View style={carrotStyle} />
+         </View>
+      </FocusableBox>
    )
 }
 
