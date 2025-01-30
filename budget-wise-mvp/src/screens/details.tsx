@@ -1,21 +1,29 @@
 import { Text, View } from 'react-native'
 
-import { InputDate } from '@/components/ui'
+import { InputCurrency } from '@/components/ui'
 import { useNavigate } from '@/contexts/router.context'
 import { useState } from 'react'
-import { AppDate } from '@/utils/app-date'
+
+import { AppMoney } from '@/utils/app-money'
 
 export function Details() {
    const { navigate } = useNavigate()
-   const [selectedDate, setSelectedDate] = useState<AppDate | null>(null)
+   const [value, setValue] = useState<AppMoney | null>(null)
 
    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View
+         style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 32,
+         }}
+      >
          <Text onPress={() => navigate('back')}>Details</Text>
 
-         <InputDate
-            appDate={selectedDate}
-            onDateChange={setSelectedDate}
+         <InputCurrency
+            value={value}
+            onChangeText={setValue}
          />
       </View>
    )

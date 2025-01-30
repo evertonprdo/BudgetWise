@@ -1,16 +1,17 @@
+import { useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 
 import { colors } from '@/styles'
-import { Button, Input, InputDate, Select } from '@/components/ui'
-
-import { useNavigate } from '@/contexts/router.context'
-import { l10n } from '@/libs/localization'
 import { Calendar, Triangle, X } from '@/assets/icons'
-import { useState } from 'react'
+import { Button, InputCurrency, InputDate, Select } from '@/components/ui'
+
+import { AppMoney } from '@/utils/app-money'
+import { useNavigate } from '@/contexts/router.context'
 
 export function Index() {
    const { navigate } = useNavigate()
    const [selected, setSelected] = useState<string | null>(null)
+   const [curr, setCurr] = useState<AppMoney | null>(null)
 
    const options = [
       {
@@ -44,9 +45,9 @@ export function Index() {
 
             <InputDate />
 
-            <Input
-               placeholder={`0${l10n.decimalSeparator}00`}
-               textAlign="right"
+            <InputCurrency
+               value={curr}
+               onChangeText={setCurr}
             />
 
             <View
