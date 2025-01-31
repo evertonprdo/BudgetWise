@@ -1,6 +1,6 @@
 export const sizes = {
    radius: {
-      md: 6,
+      md: 12,
       full: 9999,
    },
    height: {

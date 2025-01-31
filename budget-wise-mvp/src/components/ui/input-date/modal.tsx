@@ -79,7 +79,7 @@ export function Modal({ visible, children, onRequestClose, ...props }: Props) {
                      <Text style={s.title}>Header</Text>
                      <X
                         onPress={onRequestClose}
-                        color={colors.zinc[500]}
+                        color={colors.stone[500]}
                         size={24}
                      />
                   </View>
@@ -110,7 +110,7 @@ const s = StyleSheet.create({
    bg: {
       width: Screen.width,
       height: Screen.height,
-      backgroundColor: `${colors.zinc[800]}${opacity[30]}`,
+      backgroundColor: `${colors.stone[800]}${opacity[30]}`,
    },
    container: {
       flex: 1,
@@ -122,14 +122,14 @@ const s = StyleSheet.create({
       paddingHorizontal: 24,
       borderTopRightRadius: 24,
       borderTopLeftRadius: 24,
-      backgroundColor: colors.zinc[200],
+      backgroundColor: colors.stone[200],
    },
    divider: {
       marginHorizontal: 'auto',
       width: 80,
       height: 4,
       borderRadius: sizes.radius.full,
-      backgroundColor: colors.zinc[400],
+      backgroundColor: colors.stone[400],
       marginTop: -20,
       marginBottom: 32,
    },
@@ -141,6 +141,6 @@ const s = StyleSheet.create({
    title: {
       fontFamily: fonts.family.bold,
       fontSize: fonts.size.lg,
-      color: colors.zinc[800],
+      color: colors.stone[800],
    },
 })

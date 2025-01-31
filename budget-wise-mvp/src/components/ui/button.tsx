@@ -13,7 +13,7 @@ import {
 
 import { colors, fonts, sizes, opacity } from '@/styles'
 
-type Variants = 'primary' | 'secondary'
+type Variants = 'primary' | 'secondary' | 'black'
 
 type Props = {
    variant?: Variants
@@ -61,7 +61,7 @@ export function Button({
    const containerStyle = StyleSheet.flatten([
       s.container,
       { backgroundColor, transform: [{ scale }] },
-      variant === 'secondary' && { borderColor: colors.zinc[600] },
+      variant === 'secondary' && { borderColor: colors.stone[600] },
       style,
    ])
 
@@ -86,13 +86,15 @@ export function Button({
 const AnimPressable = Animated.createAnimatedComponent(Pressable)
 
 const hoverBgColor: Record<Variants, string[]> = {
-   primary: [colors.green[600], colors.green[500]],
-   secondary: [`${colors.zinc[300]}${opacity[0]}`, colors.zinc[300]],
+   primary: [colors.emerald[600], colors.emerald[500]],
+   secondary: [`${colors.stone[300]}${opacity[0]}`, colors.stone[300]],
+   black: [colors.stone[800], colors.stone[900]],
 }
 
 const txtColor: Record<Variants, string> = {
-   primary: colors.zinc[100],
-   secondary: colors.zinc[800],
+   primary: colors.stone[100],
+   secondary: colors.stone[800],
+   black: colors.stone[100],
 }
 
 const s = StyleSheet.create({

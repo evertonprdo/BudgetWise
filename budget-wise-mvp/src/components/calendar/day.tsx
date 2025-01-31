@@ -44,7 +44,7 @@ const s = StyleSheet.create({
       aspectRatio: '1/1',
       margin: 4,
 
-      color: colors.zinc[800],
+      color: colors.stone[800],
       fontFamily: fonts.family.regular,
       fontSize: fonts.size.sm,
       textAlign: 'center',
@@ -52,12 +52,14 @@ const s = StyleSheet.create({
 
       borderRadius: sizes.radius.full,
    },
+
    markedDay: {
       fontFamily: fonts.family.medium,
-      backgroundColor: colors.green[500],
-      color: colors.zinc[100],
+      backgroundColor: colors.emerald[500],
+      color: colors.stone[100],
    },
+
    today: {
-      color: colors.green[700],
+      color: colors.emerald[700],
    },
 })

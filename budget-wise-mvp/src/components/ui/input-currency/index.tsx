@@ -1,123 +1,95 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
    Text,
-   View,
-   Modal,
-   Animated,
-   Pressable,
    StyleSheet,
-   useAnimatedValue,
    ViewStyle,
+   Modal,
+   Pressable,
+   StyleProp,
 } from 'react-native'
 
-import { colors, fonts, sizes } from '@/styles'
-import { FocusableBox } from '../focusable-box'
-import { NumericKeyboard } from './custom-keyboard'
+import { colors, fonts } from '@/styles'
+import { NumericKeyboard } from './numeric-keyboard'
 
 import { l10n } from '@/libs/localization'
-import { AppMoney } from '@/utils/app-money'
-import { useNumericKeyboard } from '@/contexts/numeric-keyboard'
+import { formatCurrency } from '@/utils/format'
 
 type Props = {
-   value?: number | null
-   onChangeNumber?: (value: number) => void
-   style?: ViewStyle
+   cents: number | null
+   onChangeNumber: (value: number) => void
+   style?: StyleProp<ViewStyle>
 }
 
-export function InputCurrency({ value, onChangeNumber, style }: Props) {
-   const { visible, hideKeyboard, showKeyboard } = useNumericKeyboard()
+export function InputCurrency({ cents: value, onChangeNumber, style }: Props) {
+   const [digits, setDigits] = useState<string[]>(
+      value ? String(value).split('') : [],
+   )
+   const [showModal, setShowModal] = useState(false)
 
-   const openModal = () => showKeyboard()
-   const closeModal = () => hideKeyboard()
+   const openModal = () => setShowModal(true)
+   const closeModal = () => setShowModal(false)
 
    function handleOnKeyPress(key: string) {
-      if (!onChangeNumber) return
-      if (key === 'backspace' && !value) return
       if (key === 'confirm') return closeModal()
 
+      let newDigits: string[]
       if (key === 'backspace') {
-         const strValue = value!.toString()
-         const prevNum = Number(strValue.substring(0, strValue.length - 1))
-         return onChangeNumber(prevNum)
+         newDigits = digits.slice(0, digits.length - 1)
+      } else {
+         newDigits = [...digits, key]
       }
 
-      const number = Number(value ? `${value}${key}` : key)
-      if (number >= Number.MAX_SAFE_INTEGER) return
+      if (newDigits.length >= 12 || (digits.length === 0 && key === '0')) return
 
-      onChangeNumber(number)
+      setDigits(newDigits)
+      onChangeNumber(Number(newDigits.join('')))
    }
 
-   const blinkAnim = useAnimatedValue(0)
-   useEffect(() => {
-      const loop = Animated.loop(
-         Animated.sequence([
-            Animated.timing(blinkAnim, {
-               toValue: 1,
-               delay: 500,
-               duration: 0,
-               useNativeDriver: true,
-            }),
-            Animated.timing(blinkAnim, {
-               toValue: 0,
-               delay: 500,
-               duration: 0,
-               useNativeDriver: true,
-            }),
-         ]),
-      )
-
-      if (visible) {
-         loop.start()
-      } else {
-         loop.stop()
-         Animated.timing(blinkAnim, {
-            toValue: 0,
-            useNativeDriver: true,
-            duration: 100,
-         }).start()
-      }
-
-      return () => loop.stop()
-   }, [visible])
-
-   const iptStyle = StyleSheet.flatten([s.text, !value && { opacity: 0.5 }])
-   const carrotStyle = StyleSheet.flatten([s.carrot, { opacity: blinkAnim }])
-
-   const iptValue = value
-      ? AppMoney.createFromCents(value).toDecimal()
-      : `0${l10n.decimalSeparator}00`
+   const containerStyle = StyleSheet.compose(s.container, style)
+   const [integers, cents] = formatCurrency(digits.join(''))
 
    return (
-      <FocusableBox
-         focused={visible}
-         onPress={openModal}
-         style={style}
-      >
-         <Text style={s.text}>{l10n.currencySymbol}</Text>
+      <>
+         <Pressable
+            onPress={openModal}
+            style={containerStyle}
+         >
+            <Text style={smallDigitsStyle}>{l10n.currencySymbol}</Text>
+            <Text style={integersStyle}>{integers}</Text>
+            <Text style={smallDigitsStyle}>{cents}</Text>
+         </Pressable>
 
-         <View style={s.iptInnerContainer}>
-            <Text style={iptStyle}>{iptValue}</Text>
-            <Animated.View style={carrotStyle} />
-         </View>
-      </FocusableBox>
+         <Modal
+            visible={showModal}
+            onRequestClose={closeModal}
+            animationType="slide"
+            transparent
+         >
+            <Pressable
+               onPress={closeModal}
+               style={s.closeArea}
+            />
+            <NumericKeyboard
+               onKeyPress={handleOnKeyPress}
+               style={s.modalContent}
+            />
+         </Modal>
+      </>
    )
 }
 
 const s = StyleSheet.create({
-   iptInnerContainer: {
-      flex: 1,
+   container: {
       flexDirection: 'row',
-      height: sizes.height.md,
-      justifyContent: 'flex-end',
-      alignItems: 'center',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      padding: 16,
+      gap: 2,
    },
 
    text: {
-      color: colors.zinc[800],
-      fontSize: fonts.size.sm,
-      fontFamily: fonts.family.regular,
-      textAlign: 'right',
-      textAlignVertical: 'center',
+      color: colors.stone[800],
+      fontFamily: fonts.family.medium,
    },
 
    closeArea: {
@@ -126,16 +98,18 @@ const s = StyleSheet.create({
 
    modalContent: {
       borderTopWidth: 1,
-      borderColor: colors.zinc[300],
-      backgroundColor: colors.zinc[100],
+      borderColor: colors.stone[300],
+      backgroundColor: colors.stone[100],
       paddingHorizontal: 8,
       paddingBottom: 16,
       paddingTop: 8,
    },
+})
 
-   carrot: {
-      height: 24,
-      width: 2,
-      backgroundColor: colors.zinc[800],
-   },
+const smallDigitsStyle = StyleSheet.compose(s.text, {
+   fontSize: fonts.size.xl,
+})
+const integersStyle = StyleSheet.compose(s.text, {
+   fontSize: fonts.size['4xl'],
+   lineHeight: fonts.size['4xl'] + 4,
 })

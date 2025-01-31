@@ -5,16 +5,17 @@ import {
    ScrollView,
    StyleSheet,
    useAnimatedValue,
+   ViewStyle,
 } from 'react-native'
 
 import { colors, sizes } from '@/styles'
 import { Option } from './option'
-import { IconComponent, Triangle } from '@/assets/icons'
 import { FocusableBox } from '../focusable-box'
+import { IconComponent, Triangle } from '@/assets/icons'
 
 export type OptionProps = {
    name: string
-   innerName?: string
+   displayName?: string
    icon?: IconComponent
    color?: string
 }
@@ -23,9 +24,10 @@ type Props = {
    options: OptionProps[]
    selected: string | null
    onChangeSelected: (selected: string) => void
+   style?: ViewStyle
 }
 
-export function Select({ options, selected, onChangeSelected }: Props) {
+export function Select({ options, selected, onChangeSelected, style }: Props) {
    const [showOptions, setShowOptions] = useState(false)
    const [optsDisplay, setOptDisplay] = useState<'flex' | 'none'>('none')
 
@@ -55,6 +57,8 @@ export function Select({ options, selected, onChangeSelected }: Props) {
       }
    }, [showOptions])
 
+   const containerStyle = StyleSheet.compose(s.container, style)
+
    const btnIconStyle = StyleSheet.flatten([
       { transform: [{ rotate: showOptions ? '180deg' : '0deg' }] },
    ])
@@ -73,7 +77,7 @@ export function Select({ options, selected, onChangeSelected }: Props) {
          <FocusableBox
             onPress={handleChangingOptsVisibility}
             focused={showOptions}
-            style={s.container}
+            style={containerStyle}
          >
             <Option
                name={currentOption?.name ?? 'none'}
@@ -82,11 +86,11 @@ export function Select({ options, selected, onChangeSelected }: Props) {
                selected={selected}
                disabled
             >
-               {currentOption?.innerName ?? 'Select'}
+               {currentOption?.displayName ?? 'Select'}
             </Option>
             <Triangle
                size={12}
-               color={colors.zinc[500]}
+               color={colors.stone[500]}
                style={btnIconStyle}
             />
          </FocusableBox>
@@ -97,7 +101,7 @@ export function Select({ options, selected, onChangeSelected }: Props) {
                contentContainerStyle={s.list}
                showsVerticalScrollIndicator={false}
             >
-               {options.map(({ color, icon, name, innerName }) => (
+               {options.map(({ color, icon, name, displayName }) => (
                   <Option
                      key={name}
                      name={name}
@@ -106,7 +110,7 @@ export function Select({ options, selected, onChangeSelected }: Props) {
                      selected={selected}
                      onPressOption={handleOnPressOption}
                   >
-                     {innerName ?? name}
+                     {displayName ?? name}
                   </Option>
                ))}
             </ScrollView>
@@ -128,7 +132,7 @@ const s = StyleSheet.create({
 
       padding: 4,
 
-      backgroundColor: colors.zinc[100],
+      backgroundColor: colors.emerald[50],
       borderRadius: sizes.radius.md,
       zIndex: 20,
       elevation: 3,

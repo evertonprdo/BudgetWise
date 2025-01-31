@@ -20,7 +20,7 @@ export function CalendarHeader({ date, onMonthChange }: Props) {
    const handleOnPressNextMonth = () => onMonthChange(monthOffset(date, +1))
 
    const iconSize = 12
-   const iconColor = colors.zinc[500]
+   const iconColor = colors.stone[500]
 
    const nextIconStyle = StyleSheet.compose(s.icon, s.nextIcon)
 

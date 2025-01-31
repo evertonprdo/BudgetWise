@@ -12,14 +12,12 @@ import {
 } from '@/components/ui'
 
 import { useNavigate } from '@/contexts/router.context'
-import { InOutButton } from '@/components/in-out-button'
 
 export function Index() {
    const { navigate } = useNavigate()
 
    const [selected, setSelected] = useState<string | null>(null)
    const [curr, setCurr] = useState<number | null>(null)
-   const [status, setStatus] = useState(false)
 
    const options = [
       {
@@ -43,7 +41,7 @@ export function Index() {
    ]
 
    return (
-      <ScrollView style={{ flex: 1, backgroundColor: colors.zinc[200] }}>
+      <ScrollView style={{ flex: 1, backgroundColor: colors.stone[200] }}>
          <View style={s.container}>
             <Select
                options={options}
@@ -56,12 +54,8 @@ export function Index() {
             <InputDate />
 
             <View style={{ flexDirection: 'row', gap: 8 }}>
-               <InOutButton
-                  isIn={status}
-                  onValueChange={setStatus}
-               />
                <InputCurrency
-                  value={curr}
+                  cents={curr}
                   onChangeNumber={setCurr}
                   style={s.flex}
                />
@@ -83,7 +77,7 @@ export function Index() {
                </Button>
                <Button
                   style={{ flex: 1 }}
-                  onPress={() => navigate('details')}
+                  onPress={() => navigate('register')}
                >
                   Confirm
                </Button>

@@ -30,7 +30,10 @@ export function FocusableBox({
 
    const borderColor = fadeAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [`${colors.zinc[500]}${opacity[0]}`, colors.zinc[500]],
+      outputRange: [
+         `${colors.emerald[500]}${opacity[10]}`,
+         colors.emerald[500],
+      ],
    })
 
    const containerStyle = StyleSheet.flatten([
@@ -68,10 +71,10 @@ const s = StyleSheet.create({
       paddingHorizontal: 16,
       gap: 8,
 
-      backgroundColor: colors.zinc[100],
+      backgroundColor: colors.emerald[50],
 
-      borderWidth: 1,
-      borderColor: colors.zinc[300],
+      borderWidth: 2,
+      borderColor: colors.stone[300],
       borderRadius: sizes.radius.md,
    },
 })

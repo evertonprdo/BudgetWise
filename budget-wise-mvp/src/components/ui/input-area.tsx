@@ -27,7 +27,7 @@ export function InputArea({
          <TextInput
             ref={iptRef}
             placeholder="Description"
-            cursorColor={colors.zinc[800]}
+            cursorColor={colors.stone[800]}
             onFocus={handleOnFocus}
             onBlur={handleOnBlur}
             style={s.ipt}
@@ -43,7 +43,7 @@ const s = StyleSheet.create({
    ipt: {
       flex: 1,
       height: 125,
-      color: colors.zinc[800],
+      color: colors.stone[800],
       fontSize: fonts.size.sm,
       fontFamily: fonts.family.regular,
    },

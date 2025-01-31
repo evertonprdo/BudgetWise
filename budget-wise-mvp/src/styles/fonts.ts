@@ -6,6 +6,9 @@ export const fonts = {
       bold: 'RubikBold',
    },
    size: {
+      '4xl': 48,
+      '3xl': 36,
+      '2xl': 30,
       xl: 24,
       lg: 20,
       md: 16,

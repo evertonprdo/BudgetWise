@@ -6,11 +6,11 @@ import {
    StyleSheet,
    Text,
    useAnimatedValue,
-   View,
 } from 'react-native'
 
 import { IconComponent } from '@/assets/icons'
 import { colors, fonts, opacity, sizes } from '@/styles'
+import { IconView } from '../icon-view'
 
 type Props = {
    name: string
@@ -27,7 +27,7 @@ export function Option({
    disabled,
    selected,
    children,
-   icon: Icon,
+   icon,
    onPressOption,
    ...props
 }: Props) {
@@ -43,7 +43,7 @@ export function Option({
 
    const backgroundColor = hoverAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [`${colors.zinc[300]}${opacity[0]}`, colors.zinc[300]],
+      outputRange: [`${colors.emerald[300]}${opacity[0]}`, colors.emerald[300]],
    })
 
    const containerStyle = StyleSheet.flatten([
@@ -51,10 +51,6 @@ export function Option({
       { backgroundColor },
       disabled && { paddingHorizontal: 0, margin: 0 },
    ])
-
-   const iconContainerStyle = StyleSheet.compose(s.iconContainer, {
-      backgroundColor: color,
-   })
 
    const textStyle = StyleSheet.compose(
       s.text,
@@ -70,13 +66,11 @@ export function Option({
          disabled={disabled}
          {...props}
       >
-         {Icon && (
-            <View style={iconContainerStyle}>
-               <Icon
-                  size={14}
-                  color={colors.zinc[100]}
-               />
-            </View>
+         {icon && (
+            <IconView
+               icon={icon}
+               color={color ?? colors.stone[500]}
+            />
          )}
 
          <Text
@@ -107,17 +101,13 @@ const s = StyleSheet.create({
       gap: 16,
       borderRadius: sizes.radius.md,
    },
+
    text: {
       height: sizes.height.md,
 
       textAlignVertical: 'center',
-      color: colors.zinc[800],
+      color: colors.stone[800],
       fontSize: fonts.size.sm,
-      fontFamily: fonts.family.regular,
-   },
-
-   iconContainer: {
-      padding: 6,
-      borderRadius: sizes.radius.full,
+      fontFamily: fonts.family.medium,
    },
 })

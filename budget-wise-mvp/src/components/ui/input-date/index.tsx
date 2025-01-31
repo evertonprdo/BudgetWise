@@ -96,7 +96,7 @@ const s = StyleSheet.create({
       height: sizes.height.md,
       textAlignVertical: 'center',
 
-      color: colors.zinc[800],
+      color: colors.stone[800],
       fontSize: fonts.size.sm,
       fontFamily: fonts.family.regular,
    },

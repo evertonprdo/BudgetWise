@@ -106,7 +106,7 @@ function AnimNumericKey({ value, onPress }: NumericKeyProps) {
       if (value === 'backspace') {
          return (
             <Backspace
-               color={colors.zinc[800]}
+               color={colors.stone[800]}
                size={24}
             />
          )
@@ -114,7 +114,7 @@ function AnimNumericKey({ value, onPress }: NumericKeyProps) {
 
       return (
          <ArrowBarToRight
-            color={colors.zinc[100]}
+            color={colors.stone[100]}
             size={24}
          />
       )
@@ -137,12 +137,15 @@ const AnimPressable = Animated.createAnimatedComponent(Pressable)
 
 const animConfig = {
    useNativeDriver: true,
-   duration: 200,
+   duration: 175,
    easing: Easing.out(Easing.exp),
 }
 
-const hoverNumericKeyBg = [`${colors.zinc[300]}${opacity[0]}`, colors.zinc[300]]
-const hoverConfirmKeyBg = [colors.green[600], colors.green[500]]
+const hoverNumericKeyBg = [
+   `${colors.stone[300]}${opacity[0]}`,
+   colors.stone[300],
+]
+const hoverConfirmKeyBg = [colors.emerald[600], colors.emerald[500]]
 
 const s = StyleSheet.create({
    container: {
@@ -168,6 +171,6 @@ const s = StyleSheet.create({
    text: {
       fontFamily: fonts.family.medium,
       fontSize: fonts.size.md,
-      color: colors.zinc[800],
+      color: colors.stone[800],
    },
 })

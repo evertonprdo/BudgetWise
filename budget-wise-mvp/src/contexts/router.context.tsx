@@ -2,12 +2,11 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { BackHandler } from 'react-native'
 
 import { Index } from '@/screens'
-import { Details } from '@/screens/details'
-import { NumericKeyboardProvider } from './numeric-keyboard'
+import { Register } from '@/screens/register'
 
 const Screens = {
    index: Index,
-   details: Details,
+   register: Register,
 } as const
 
 const RouterContext = createContext<{
@@ -49,9 +48,7 @@ export function Router() {
    const RenderScreen = Screens[stack[stack.length - 1]]
    return (
       <RouterContext.Provider value={{ navigate }}>
-         <NumericKeyboardProvider>
-            <RenderScreen />
-         </NumericKeyboardProvider>
+         <RenderScreen />
       </RouterContext.Provider>
    )
 }
