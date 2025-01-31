@@ -46,5 +46,6 @@ const s = StyleSheet.create({
       color: colors.stone[800],
       fontSize: fonts.size.sm,
       fontFamily: fonts.family.regular,
+      marginTop: 12,
    },
 })

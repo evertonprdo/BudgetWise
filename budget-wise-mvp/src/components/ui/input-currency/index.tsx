@@ -39,7 +39,7 @@ export function InputCurrency({ cents: value, onChangeNumber, style }: Props) {
          newDigits = [...digits, key]
       }
 
-      if (newDigits.length >= 12 || (digits.length === 0 && key === '0')) return
+      if (newDigits.length > 10 || (digits.length === 0 && key === '0')) return
 
       setDigits(newDigits)
       onChangeNumber(Number(newDigits.join('')))

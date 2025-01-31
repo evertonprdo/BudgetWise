@@ -1,7 +1,7 @@
 import { l10n } from '../libs/localization'
 
 export class AppMoney {
-   private locale = l10n.regionCode ?? 'default'
+   private locale = l10n.languageTag ?? 'default'
    constructor(private _cents: number) {}
 
    get cents() {

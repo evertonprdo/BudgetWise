@@ -1,7 +1,7 @@
 import { l10n } from '../libs/localization'
 
 export class AppDate {
-   private locale = l10n.regionCode ?? 'default'
+   private locale = l10n.languageTag ?? 'default'
    private constructor(private _date: Date) {}
 
    get date() {

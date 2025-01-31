@@ -26,7 +26,7 @@ export function CalendarHeader({ date, onMonthChange }: Props) {
 
    const weekDays = useMemo(() => {
       return Array.from({ length: 7 }, (_, i) =>
-         Intl.DateTimeFormat(l10n.regionCode ?? 'default', {
+         Intl.DateTimeFormat(l10n.languageTag ?? 'default', {
             weekday: 'long',
             timeZone: 'UTC',
          }).format(new Date(Date.UTC(2023, 0, i + 1))),
@@ -37,7 +37,7 @@ export function CalendarHeader({ date, onMonthChange }: Props) {
       <>
          <View style={s.header}>
             <Text style={s.title}>
-               {Intl.DateTimeFormat(l10n.regionCode ?? 'default', {
+               {Intl.DateTimeFormat(l10n.languageTag ?? 'default', {
                   month: 'long',
                   year: 'numeric',
                }).format(date)}
@@ -71,7 +71,7 @@ export function CalendarHeader({ date, onMonthChange }: Props) {
                   key={item}
                   style={s.weekDayText}
                >
-                  {item.substring(0, 2)}
+                  {item.substring(0, 3)}
                </Text>
             ))}
          </View>
@@ -99,10 +99,12 @@ const s = StyleSheet.create({
       fontSize: fonts.size.sm,
       textAlign: 'center',
       verticalAlign: 'middle',
+      textTransform: 'capitalize',
    },
 
    title: {
       fontFamily: fonts.family.medium,
+      color: colors.stone[800],
    },
 
    options: {

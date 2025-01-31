@@ -71,13 +71,22 @@ export function TransactionItem({
          <View style={pipeStyle} />
 
          <View style={s.content}>
-            <Text
-               style={s.title}
-               numberOfLines={1}
-               ellipsizeMode="tail"
-            >
-               {description}
-            </Text>
+            <View style={s.header}>
+               <Text
+                  style={s.title}
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+               >
+                  {description}
+               </Text>
+               <IconView
+                  icon={category.icon}
+                  color={category.color}
+                  style={s.icon}
+                  size={20}
+               />
+            </View>
+
             <View style={s.description}>
                <Text
                   style={s.amount}
@@ -88,20 +97,13 @@ export function TransactionItem({
                </Text>
                <Text
                   style={s.txtDate}
-                  numberOfLines={1}
+                  numberOfLines={2}
                   ellipsizeMode="tail"
                >
                   {date}
                </Text>
             </View>
          </View>
-
-         <IconView
-            icon={category.icon}
-            color={category.color}
-            style={s.icon}
-            size={20}
-         />
       </AnimPressable>
    )
 }
@@ -124,7 +126,6 @@ const s = StyleSheet.create({
       alignItems: 'center',
 
       padding: 6,
-      paddingRight: 8,
 
       borderWidth: 2,
       borderRadius: sizes.radius.md,
@@ -144,10 +145,18 @@ const s = StyleSheet.create({
    content: {
       flex: 1,
       gap: 8,
-      paddingHorizontal: 16,
+      paddingLeft: 12,
+   },
+
+   header: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      justifyContent: 'space-between',
+      gap: 8,
    },
 
    title: {
+      flex: 1,
       fontFamily: fonts.family.medium,
    },
 
@@ -165,7 +174,7 @@ const s = StyleSheet.create({
 
    txtDate: {
       fontFamily: fonts.family.semiBold,
-      fontSize: fonts.size.md,
+      fontSize: fonts.size.sm,
    },
 
    icon: {

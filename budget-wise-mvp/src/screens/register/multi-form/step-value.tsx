@@ -43,7 +43,7 @@ export function StepValue() {
 
 const s = StyleSheet.create({
    container: {
-      gap: 32,
+      gap: 16,
    },
 
    title: {
