@@ -1,4 +1,5 @@
 import * as SQLite from 'expo-sqlite'
+import { dbConnection } from './db-connection'
 
 export class TransactionsRepository {
    private constructor(private db: SQLite.SQLiteDatabase) {
@@ -20,7 +21,7 @@ export class TransactionsRepository {
 
    static async create(): Promise<TransactionsRepository> {
       try {
-         const db = await SQLite.openDatabaseAsync('budgetWise')
+         const db = await dbConnection
          return new TransactionsRepository(db)
       } catch (error) {
          throw error

@@ -1,5 +1,5 @@
 import { IconComponent } from '@/assets/icons'
-import { colors, sizes } from '@/styles'
+import { colors } from '@/styles'
 import { StyleSheet, View, ViewProps } from 'react-native'
 
 type Props = {
@@ -31,6 +31,7 @@ export function IconView({ icon: Icon, style, color, size, ...props }: Props) {
 const s = StyleSheet.create({
    container: {
       padding: 6,
-      borderRadius: sizes.radius.full,
+      overflow: 'hidden',
+      borderRadius: '50%',
    },
 })

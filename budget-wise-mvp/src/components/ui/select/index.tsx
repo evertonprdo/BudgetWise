@@ -22,7 +22,7 @@ export type OptionProps = {
 
 type Props = {
    options: OptionProps[]
-   selected: string | null
+   selected?: string | null
    onChangeSelected: (selected: string) => void
    style?: ViewStyle
 }

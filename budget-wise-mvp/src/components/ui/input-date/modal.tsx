@@ -122,7 +122,7 @@ const s = StyleSheet.create({
       paddingHorizontal: 24,
       borderTopRightRadius: 24,
       borderTopLeftRadius: 24,
-      backgroundColor: colors.stone[200],
+      backgroundColor: colors.stone[50],
    },
    divider: {
       marginHorizontal: 'auto',

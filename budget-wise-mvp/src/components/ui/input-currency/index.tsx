@@ -15,7 +15,7 @@ import { l10n } from '@/libs/localization'
 import { formatCurrency } from '@/utils/format'
 
 type Props = {
-   cents: number | null
+   cents?: number | null
    onChangeNumber: (value: number) => void
    style?: StyleProp<ViewStyle>
 }

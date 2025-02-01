@@ -8,6 +8,7 @@ import Backspace from './backspace'
 import ArrowBarToRight from './arrow-bar-to-right'
 import ArrowRight from './arrow-right'
 import ArrowSort from './arrows-sort'
+import Empty from './empty'
 
 export {
    IconComponent,
@@ -20,4 +21,5 @@ export {
    ArrowBarToRight,
    ArrowRight,
    ArrowSort,
+   Empty,
 }

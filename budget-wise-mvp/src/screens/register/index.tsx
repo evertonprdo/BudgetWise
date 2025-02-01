@@ -1,50 +1,36 @@
-import { useState } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { Alert, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { colors } from '@/styles'
-import { Button } from '@/components/ui'
-
+import { RegisterForm } from './form'
 import { RegisterHeader } from './header'
-import { StepValue } from './multi-form/step-value'
-import { StepDetails } from './multi-form/step-details'
-import { FormRegisterProvider } from './form.context'
+
+import { useNavigate } from '@/contexts/router.context'
+import { FormRegisterProvider } from './form-context/form-register'
 
 export function Register() {
-   const [step, setStep] = useState(0)
+   const { navigate } = useNavigate()
 
-   function handleNext() {
-      setStep(step + 1)
-   }
-   function handleBack() {
-      setStep(step - 1)
+   function handleOnRequestCancel() {
+      Alert.alert(
+         'Canceling Registration',
+         'Are you sure you want to cancel your registration? Your progress will be lost.',
+         [
+            { text: 'Back', style: 'cancel' },
+            { text: 'Confirm', onPress: () => navigate('back') },
+         ],
+      )
    }
 
    return (
-      <FormRegisterProvider>
+      <FormRegisterProvider
+         onSubmit={() => navigate('back')}
+         onRequestCancel={handleOnRequestCancel}
+      >
          <SafeAreaView style={s.root}>
-            <RegisterHeader currentStep={step} />
+            <RegisterHeader onRequestCancel={handleOnRequestCancel} />
 
-            <View style={s.form}>
-               {[<StepValue />, <StepDetails />][step]}
-
-               <View style={s.options}>
-                  <Button
-                     onPress={handleBack}
-                     style={s.flex}
-                     variant="secondary"
-                  >
-                     Back
-                  </Button>
-                  <Button
-                     onPress={handleNext}
-                     style={s.flex}
-                     variant="black"
-                  >
-                     Next
-                  </Button>
-               </View>
-            </View>
+            <RegisterForm />
          </SafeAreaView>
       </FormRegisterProvider>
    )
@@ -54,26 +40,5 @@ const s = StyleSheet.create({
    root: {
       flex: 1,
       backgroundColor: colors.stone[200],
-   },
-
-   form: {
-      flex: 1,
-      gap: 16,
-      padding: 24,
-
-      borderTopRightRadius: 24,
-      borderTopLeftRadius: 24,
-      backgroundColor: colors.stone[50],
-      elevation: 7,
-   },
-
-   options: {
-      gap: 8,
-      flexDirection: 'row',
-      marginTop: 'auto',
-   },
-
-   flex: {
-      flex: 1,
    },
 })
