@@ -3,6 +3,7 @@ import { BackHandler } from 'react-native'
 
 import { Index } from '@/screens'
 import { Register } from '@/screens/register'
+import { DBProvider } from './db-context'
 
 const Screens = {
    index: Index,

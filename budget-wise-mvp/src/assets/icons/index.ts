@@ -9,6 +9,9 @@ import ArrowBarToRight from './arrow-bar-to-right'
 import ArrowRight from './arrow-right'
 import ArrowSort from './arrows-sort'
 import Empty from './empty'
+import BuildingStore from './categories/building-store'
+import Refresh from './categories/refresh'
+import Bulb from './categories/bulb'
 
 export {
    IconComponent,
@@ -22,4 +25,7 @@ export {
    ArrowRight,
    ArrowSort,
    Empty,
+   BuildingStore,
+   Refresh,
+   Bulb,
 }

@@ -12,7 +12,7 @@ import { IconView } from './ui'
 import { IconComponent } from '@/assets/icons'
 import { colors, fonts, opacity, sizes } from '@/styles'
 
-type Props = {
+export interface TransactionProps {
    type: 'income' | 'expense'
    date: string
    amount: string
@@ -21,15 +21,15 @@ type Props = {
       icon: IconComponent
       color: string
    }
+}
+
+type Props = {
+   transaction: TransactionProps
    onPress?: () => void
 }
 
 export function TransactionItem({
-   type,
-   amount,
-   category,
-   date,
-   description,
+   transaction: { type, amount, category, date, description },
    onPress,
 }: Props) {
    const handleOnPressIn = () => onPress && pushIn.start()

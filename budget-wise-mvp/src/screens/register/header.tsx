@@ -1,8 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
 
-import { colors, fonts, opacity, sizes } from '@/styles'
 import { Empty, X } from '@/assets/icons'
+import { CategoryIcons } from '@/assets/icons/categories'
+
+import { colors, fonts, opacity, sizes } from '@/styles'
 import { TransactionItem } from '@/components/transaction-item'
+
 import { useFormRegister } from './form-context/use-form-register'
 
 type Props = {
@@ -13,8 +16,18 @@ export function RegisterHeader({ onRequestCancel }: Props) {
    const { categories, transaction, currentStep, FormSteps } = useFormRegister()
 
    const currentCategory = categories.find(
-      ({ name }) => transaction.category === name,
-   ) ?? { color: '', icon: Empty }
+      ({ name }) => transaction.category === name.value,
+   )
+
+   const currentIcon = currentCategory
+      ? {
+           color: currentCategory.color,
+           icon:
+              CategoryIcons[
+                 currentCategory.iconKey as keyof typeof CategoryIcons
+              ] ?? Empty,
+        }
+      : { color: '', icon: Empty }
 
    return (
       <View style={s.container}>
@@ -28,11 +41,13 @@ export function RegisterHeader({ onRequestCancel }: Props) {
 
          <View style={s.header}>
             <TransactionItem
-               type={transaction.type}
-               amount={transaction.amount?.toCurrency() ?? ''}
-               category={currentCategory}
-               date={transaction.date?.toShortDate() ?? ''}
-               description={transaction.description ?? ''}
+               transaction={{
+                  type: transaction.type,
+                  amount: transaction.amount?.toCurrency() ?? '',
+                  category: currentIcon,
+                  date: transaction.date?.toShortDate() ?? '',
+                  description: transaction.description ?? '',
+               }}
             />
             <View style={s.steps}>
                {FormSteps.map((_, i) => (

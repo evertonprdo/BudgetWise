@@ -1,10 +1,14 @@
+import { useMemo } from 'react'
 import { Text, View } from 'react-native'
 
 import { styles } from './styles'
+import { OptionProps } from '@/components/ui/select'
 import { InputArea, InputDate, Select } from '@/components/ui'
 import { useFormRegister } from '../../form-context/use-form-register'
 
+import { Empty } from '@/assets/icons'
 import { AppDate } from '@/utils/app-date'
+import { CategoryIcons } from '@/assets/icons/categories'
 
 export function StepDetails() {
    const { transaction, categories, setTransactionProp } = useFormRegister()
@@ -21,6 +25,17 @@ export function StepDetails() {
       setTransactionProp('description', text)
    }
 
+   const options = useMemo(() => {
+      return categories.map<OptionProps>((category) => ({
+         name: category.name.value,
+         color: category.color,
+         displayName: category.displayName,
+         icon: CategoryIcons[
+            category.iconKey as keyof typeof CategoryIcons
+         ] ?? <Empty />,
+      }))
+   }, [categories])
+
    return (
       <>
          <Text style={styles.title}>Enter the transaction details</Text>
@@ -28,7 +43,7 @@ export function StepDetails() {
          <View style={styles.iptWrapper}>
             <Text style={styles.label}>Category</Text>
             <Select
-               options={categories}
+               options={options}
                selected={transaction.category}
                onChangeSelected={handleOnCategoryChange}
             />

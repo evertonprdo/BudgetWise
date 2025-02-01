@@ -1,15 +1,18 @@
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
-
-import { colors } from '@/styles'
-import { Calendar, IconComponent, Triangle, X } from '@/assets/icons'
 
 import { StepValue } from '../form/steps/type-amount'
 import { StepDetails } from '../form/steps/details'
 
+import { useDB } from '@/contexts/db-context'
+import { isValidAmount, isValidDescription } from './validate'
+
+import { Category } from '@/core/entities/category'
+import { ListCategoriesUseCase } from '@/core/use-cases/list-categories'
+
 import { AppDate } from '@/utils/app-date'
 import { AppMoney } from '@/utils/app-money'
-import { isValidAmount, isValidDescription } from './validate'
+import { CreateTransactionUseCase } from '@/core/use-cases/create-transaction.use-case'
 
 export type TransactionProps = {
    type: 'income' | 'expense'
@@ -32,12 +35,7 @@ type ContextProps = {
    stepLeft: () => void
    stepRight: () => void
 
-   categories: {
-      name: string
-      displayName: string
-      icon: IconComponent
-      color: string
-   }[]
+   categories: Category[]
 }
 
 type ProviderProps = {
@@ -62,7 +60,11 @@ export function FormRegisterProvider({
    onRequestCancel,
    transaction: initialTransaction,
 }: ProviderProps) {
+   const { repositories } = useDB()
+
    const [currentStep, setCurrentStep] = useState<FORM_STEPS>(0)
+
+   const [categories, setCategories] = useState<Category[]>([])
    const [transaction, setTransaction] = useState<TransactionProps>(
       initialTransaction ?? {
          type: 'expense',
@@ -87,7 +89,7 @@ export function FormRegisterProvider({
       }
    }
 
-   function handleRight() {
+   async function handleRight() {
       switch (currentStep) {
          case FORM_STEPS.TYPE_AND_AMOUNT:
             if (transaction.amount && isValidAmount(transaction.amount)) {
@@ -97,12 +99,15 @@ export function FormRegisterProvider({
          case FORM_STEPS.DETAILS:
             if (
                transaction.description &&
+               transaction.category &&
                isValidDescription(transaction.description)
             ) {
-               return submitTransaction()
+               return await submitTransaction()
             }
             return showWrongFieldAlert(
-               'The description must have a minimum of 3 characters and a maximum of 500',
+               !transaction.category
+                  ? 'Please select category'
+                  : 'The description must have a minimum of 3 characters and a maximum of 500',
             )
       }
    }
@@ -111,14 +116,57 @@ export function FormRegisterProvider({
       Alert.alert('Form error', message)
    }
 
-   function submitTransaction() {
-      console.log(transaction)
-      Alert.alert(
-         'Form',
-         'Your transaction has been successfully registered!',
-         [{ text: 'Go Home', onPress: onSubmit }],
-      )
+   async function submitTransaction() {
+      try {
+         const category = categories.find(
+            (cat) => cat.name.value === transaction.category,
+         )
+
+         if (!category) {
+            throw new Error()
+         }
+
+         const result = await new CreateTransactionUseCase(
+            repositories.transactions,
+            repositories.categories,
+         ).execute({
+            type: transaction.type,
+            amount: transaction.amount!.cents,
+            date: transaction.date!.unix,
+            categoryId: category.id.toString(),
+            description: transaction.description!,
+         })
+
+         if (result.isLeft()) {
+            throw new Error()
+         }
+
+         Alert.alert(
+            'Form',
+            'Your transaction has been successfully registered!',
+            [{ text: 'Go Home', onPress: onSubmit }],
+         )
+      } catch (error) {
+         Alert.alert('Form error', 'Something got wrong try again!')
+         throw error
+      }
    }
+
+   async function fetchCategories() {
+      const result = await new ListCategoriesUseCase(
+         repositories.categories,
+      ).execute()
+
+      if (result.isLeft()) {
+         throw new Error('Fail to fetch categories')
+      }
+
+      setCategories(result.value.categories)
+   }
+
+   useEffect(() => {
+      fetchCategories()
+   }, [])
 
    return (
       <formRegisterContext.Provider
@@ -136,24 +184,3 @@ export function FormRegisterProvider({
       </formRegisterContext.Provider>
    )
 }
-
-const categories = [
-   {
-      name: 'category',
-      displayName: 'Category',
-      icon: Triangle,
-      color: colors.green[500],
-   },
-   {
-      name: 'other-category',
-      displayName: 'Other Category',
-      color: colors.emerald[500],
-      icon: Calendar,
-   },
-   {
-      name: 'another-category',
-      displayName: 'Another Category',
-      color: colors.red[500],
-      icon: X,
-   },
-]

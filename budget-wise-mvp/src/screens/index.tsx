@@ -1,102 +1,104 @@
-import { useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { useEffect, useState } from 'react'
+import { FlatList, StyleSheet, Text } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { colors } from '@/styles'
-import { Calendar, Triangle, X } from '@/assets/icons'
-import {
-   Button,
-   InputArea,
-   InputCurrency,
-   InputDate,
-   Select,
-} from '@/components/ui'
-
+import { colors, fonts } from '@/styles'
+import { useDB } from '@/contexts/db-context'
+import { Button } from '@/components/ui'
 import { useNavigate } from '@/contexts/router.context'
 
+import {
+   TransactionItem,
+   TransactionProps,
+} from '@/components/transaction-item'
+
+import { Empty } from '@/assets/icons'
+import { CategoryIcons } from '@/assets/icons/categories'
+
+import { ListTransactionsUseCase } from '@/core/use-cases/list-transactions.use-case'
+
 export function Index() {
+   const { repositories } = useDB()
    const { navigate } = useNavigate()
 
-   const [selected, setSelected] = useState<string | null>(null)
-   const [curr, setCurr] = useState<number | null>(null)
+   const [transactions, setTransactions] = useState<TransactionProps[]>([])
 
-   const options = [
-      {
-         name: 'category',
-         innerName: 'Category',
-         color: colors.green[500],
-         icon: Triangle,
-      },
-      {
-         name: 'other-category',
-         innerName: 'Other Category',
-         color: colors.emerald[500],
-         icon: Calendar,
-      },
-      {
-         name: 'another-category',
-         innerName: 'Another Category',
-         color: colors.red[500],
-         icon: X,
-      },
-   ]
+   async function listTransactions() {
+      const result = await new ListTransactionsUseCase(
+         repositories.transactions,
+      ).execute()
+
+      if (result.isLeft()) {
+         throw new Error('Fail to list transactions')
+      }
+
+      setTransactions(
+         result.value.transactions.map<TransactionProps>((item) => ({
+            type: item.type,
+            amount: item.amount.toCurrency(),
+            date: item.date.toShortDate(),
+            description: item.description,
+            category: {
+               color: item.category.color,
+               icon:
+                  CategoryIcons[
+                     item.category.iconKey as keyof typeof CategoryIcons
+                  ] ?? Empty,
+            },
+         })),
+      )
+   }
+
+   useEffect(() => {
+      listTransactions()
+   }, [navigate])
 
    return (
-      <ScrollView style={{ flex: 1, backgroundColor: colors.stone[200] }}>
-         <View style={s.container}>
-            <Select
-               options={options}
-               selected={selected}
-               onChangeSelected={setSelected}
-            />
+      <SafeAreaView style={s.root}>
+         <Text style={s.title}>Budget Wise</Text>
+         <FlatList
+            data={transactions}
+            renderItem={({ item }) => <TransactionItem transaction={item} />}
+            style={s.scrollView}
+            contentContainerStyle={s.container}
+         />
 
-            <InputArea />
-
-            <InputDate />
-
-            <View style={{ flexDirection: 'row', gap: 8 }}>
-               <InputCurrency
-                  cents={curr}
-                  onChangeNumber={setCurr}
-                  style={s.flex}
-               />
-            </View>
-
-            <View
-               style={{
-                  flexDirection: 'row',
-                  flex: 1,
-                  gap: 8,
-                  marginTop: 8,
-               }}
-            >
-               <Button
-                  style={{ flex: 1 }}
-                  variant="secondary"
-               >
-                  Cancel
-               </Button>
-               <Button
-                  style={{ flex: 1 }}
-                  onPress={() => navigate('register')}
-               >
-                  Confirm
-               </Button>
-            </View>
-         </View>
-      </ScrollView>
+         <Button
+            onPress={() => navigate('register')}
+            style={s.footer}
+         >
+            Register Transaction
+         </Button>
+      </SafeAreaView>
    )
 }
 
 const s = StyleSheet.create({
-   container: {
-      marginTop: 200,
+   root: {
       flex: 1,
-      gap: 16,
-
-      justifyContent: 'center',
-      padding: 32,
+      backgroundColor: colors.stone[50],
    },
-   flex: {
+   title: {
+      fontFamily: fonts.family.bold,
+      fontSize: fonts.size.xl,
+      color: colors.stone[800],
+      textAlign: 'center',
+      marginVertical: 16,
+   },
+   scrollView: {
       flex: 1,
+      padding: 16,
+      backgroundColor: colors.stone[200],
+      borderColor: colors.stone[300],
+      borderTopWidth: 2,
+      borderBottomWidth: 2,
+   },
+   container: {
+      flexGrow: 1,
+      gap: 16,
+      paddingBottom: 200,
+   },
+   footer: {
+      margin: 24,
    },
 })
