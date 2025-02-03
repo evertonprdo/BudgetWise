@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 
 import { StepValue } from '../form/steps/type-amount'
@@ -7,12 +7,12 @@ import { StepDetails } from '../form/steps/details'
 import { useDB } from '@/contexts/db-context'
 import { isValidAmount, isValidDescription } from './validate'
 
-import { Category } from '@/core/entities/category'
-import { ListCategoriesUseCase } from '@/core/use-cases/list-categories'
+import { Category } from '@/domain/transactions/entities/category'
+import { CreateTransactionUseCase } from '@/domain/transactions/use-cases/create-transaction.use-case'
+import { ListCategoriesUseCase } from '@/domain/transactions/use-cases/list-categories'
 
 import { AppDate } from '@/utils/app-date'
 import { AppMoney } from '@/utils/app-money'
-import { CreateTransactionUseCase } from '@/core/use-cases/create-transaction.use-case'
 
 export type TransactionProps = {
    type: 'income' | 'expense'
@@ -183,4 +183,14 @@ export function FormRegisterProvider({
          {children}
       </formRegisterContext.Provider>
    )
+}
+
+export function useFormRegister() {
+   const hook = useContext(formRegisterContext)
+
+   if (hook === null) {
+      throw new Error('Wrap with <FormRegisterProvider/>')
+   }
+
+   return hook
 }

@@ -1,16 +1,15 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { BackHandler } from 'react-native'
 
 import { Index } from '@/screens'
 import { Register } from '@/screens/register'
-import { DBProvider } from './db-context'
 
 const Screens = {
    index: Index,
    register: Register,
 } as const
 
-const RouterContext = createContext<{
+export const RouterContext = createContext<{
    navigate: (screenName: NavigateProps) => void
 } | null>(null)
 
@@ -52,12 +51,4 @@ export function Router() {
          <RenderScreen />
       </RouterContext.Provider>
    )
-}
-
-export function useNavigate() {
-   const router = useContext(RouterContext)
-   if (!router) {
-      throw new Error()
-   }
-   return router
 }

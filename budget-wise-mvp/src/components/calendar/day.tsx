@@ -41,8 +41,7 @@ export function CalendarDay({ date, disabled, markedDay, onDayPress }: Props) {
 const s = StyleSheet.create({
    day: {
       flex: 1,
-      aspectRatio: '1/1',
-      margin: 4,
+      margin: 2,
 
       color: colors.stone[800],
       fontFamily: fonts.family.regular,

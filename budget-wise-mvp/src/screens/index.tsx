@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { colors, fonts } from '@/styles'
 import { useDB } from '@/contexts/db-context'
 import { Button } from '@/components/ui'
-import { useNavigate } from '@/contexts/router.context'
 
 import {
    TransactionItem,
@@ -15,11 +14,12 @@ import {
 import { Empty } from '@/assets/icons'
 import { CategoryIcons } from '@/assets/icons/categories'
 
-import { ListTransactionsUseCase } from '@/core/use-cases/list-transactions.use-case'
+import { useRouter } from '@/hooks/useRouter'
+import { ListTransactionsUseCase } from '@/domain/transactions/use-cases/list-transactions.use-case'
 
 export function Index() {
    const { repositories } = useDB()
-   const { navigate } = useNavigate()
+   const { navigate } = useRouter()
 
    const [transactions, setTransactions] = useState<TransactionProps[]>([])
 

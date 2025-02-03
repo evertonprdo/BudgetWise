@@ -1,12 +1,9 @@
-import { Transaction } from '@/core/entities/transaction'
-import { TransactionsRepository } from '@/core/repositories/transactions.repository'
+import { Transaction } from '@/domain/transactions/entities/transaction'
+import { TransactionsRepository } from '@/domain/transactions/repositories/transactions.repository'
 
 import { Database } from '../database'
 
-import {
-   SQLiteTransaction,
-   TransactionMapper,
-} from '../mappers/transaction.mapper'
+import { TransactionMapper } from '../mappers/transaction.mapper'
 import {
    SQLiteTransactionDetails,
    TransactionDetailsMapper,
@@ -50,7 +47,8 @@ export class SQLiteTransactionsRepository implements TransactionsRepository {
                 c.icon_key,
                 c.description AS category_description
          FROM ${this.tableName} AS t
-         JOIN categories AS c ON t.category_id = c.id;
+         JOIN categories AS c ON t.category_id = c.id
+         ORDER BY t.date DESC;
       `)
 
       return transactions.map(TransactionDetailsMapper.toDomain)

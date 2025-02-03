@@ -7,10 +7,11 @@ import {
 } from 'react'
 
 import { Database } from '@/libs/sqlite/database'
-import { CategoriesRepository } from '@/core/repositories/categories.repository'
-import { TransactionsRepository } from '@/core/repositories/transactions.repository'
-import { SQLiteTransactionsRepository } from '@/libs/sqlite/repositories/transactions.repository'
+
+import { CategoriesRepository } from '@/domain/transactions/repositories/categories.repository'
+import { TransactionsRepository } from '@/domain/transactions/repositories/transactions.repository'
 import { SQLiteCategoriesRepository } from '@/libs/sqlite/repositories/categories.repository'
+import { SQLiteTransactionsRepository } from '@/libs/sqlite/repositories/transactions.repository'
 
 type Repositories = {
    transactions: TransactionsRepository

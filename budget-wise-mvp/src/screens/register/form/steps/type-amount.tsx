@@ -2,10 +2,10 @@ import { Text, View } from 'react-native'
 
 import { styles } from './styles'
 import { InputCurrency } from '@/components/ui'
-import { useFormRegister } from '../../form-context/use-form-register'
 import { SwitchTransactionType } from '@/components/switch-transaction-type'
 
 import { AppMoney } from '@/utils/app-money'
+import { useFormRegister } from '../../form-context/form-register'
 
 export function StepValue() {
    const { transaction, setTransactionProp } = useFormRegister()

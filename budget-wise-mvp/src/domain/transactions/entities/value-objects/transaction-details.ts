@@ -1,9 +1,9 @@
-import { UniqueEntityID } from '../unique-entity-id'
-import { ValueObject } from './value-object'
+import { UniqueEntityID } from '@/domain/core/entities/unique-entity-id'
+import { ValueObject } from '@/domain/core/entities/value-objects/value-object'
 
 import { Money } from './money'
 import { AppDate } from './app-date'
-import { TransactionTypes } from '../transaction'
+import { TransactionTypes } from '../../../transactions/entities/transaction'
 
 export interface TransactionDetailsProps {
    id: UniqueEntityID

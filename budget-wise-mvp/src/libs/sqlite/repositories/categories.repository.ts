@@ -1,5 +1,5 @@
-import { Category } from '@/core/entities/category'
-import { CategoriesRepository } from '@/core/repositories/categories.repository'
+import { Category } from '@/domain/transactions/entities/category'
+import { CategoriesRepository } from '@/domain/transactions/repositories/categories.repository'
 
 import { Database } from '../database'
 import { CategoryMapper, SQLiteCategory } from '../mappers/category.mapper'

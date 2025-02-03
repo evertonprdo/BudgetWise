@@ -1,5 +1,5 @@
-import { Entity } from './entity'
-import { UniqueEntityID } from './unique-entity-id'
+import { Entity } from '../../core/entities/entity'
+import { UniqueEntityID } from '../../core/entities/unique-entity-id'
 
 import { Money } from './value-objects/money'
 import { AppDate } from './value-objects/app-date'

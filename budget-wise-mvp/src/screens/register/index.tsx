@@ -5,11 +5,11 @@ import { colors } from '@/styles'
 import { RegisterForm } from './form'
 import { RegisterHeader } from './header'
 
-import { useNavigate } from '@/contexts/router.context'
+import { useRouter } from '@/hooks/useRouter'
 import { FormRegisterProvider } from './form-context/form-register'
 
 export function Register() {
-   const { navigate } = useNavigate()
+   const { navigate } = useRouter()
 
    function handleOnRequestCancel() {
       Alert.alert(

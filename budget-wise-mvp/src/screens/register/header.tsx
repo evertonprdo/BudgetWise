@@ -5,8 +5,7 @@ import { CategoryIcons } from '@/assets/icons/categories'
 
 import { colors, fonts, opacity, sizes } from '@/styles'
 import { TransactionItem } from '@/components/transaction-item'
-
-import { useFormRegister } from './form-context/use-form-register'
+import { useFormRegister } from './form-context/form-register'
 
 type Props = {
    onRequestCancel: () => void
@@ -65,7 +64,11 @@ export function RegisterHeader({ onRequestCancel }: Props) {
 }
 
 const s = StyleSheet.create({
-   container: { gap: 8, padding: 16 },
+   container: {
+      gap: 16,
+      paddingHorizontal: 16,
+      paddingVertical: 24,
+   },
 
    options: {
       flexDirection: 'row',

@@ -1,7 +1,6 @@
-import { Category } from '@/core/entities/category'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-
-import { Slug } from '@/core/entities/value-objects/slug'
+import { UniqueEntityID } from '@/domain/core/entities/unique-entity-id'
+import { Category } from '@/domain/transactions/entities/category'
+import { Slug } from '@/domain/transactions/entities/value-objects/slug'
 
 export interface SQLiteCategory {
    id: string

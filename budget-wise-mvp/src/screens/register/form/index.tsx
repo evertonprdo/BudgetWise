@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { colors } from '@/styles'
 import { Button } from '@/components/ui'
 
-import { useFormRegister } from '../form-context/use-form-register'
+import { useFormRegister } from '../form-context/form-register'
 
 export function RegisterForm() {
    const { currentStep, FormSteps, stepLeft, stepRight } = useFormRegister()
@@ -17,6 +17,7 @@ export function RegisterForm() {
       <ScrollView
          style={s.scrollView}
          contentContainerStyle={s.form}
+         showsVerticalScrollIndicator={false}
       >
          <View style={s.container}>
             <FormStep />
@@ -55,7 +56,7 @@ const s = StyleSheet.create({
    form: {
       flexGrow: 1,
       justifyContent: 'space-between',
-      gap: 16,
+      gap: 32,
       padding: 24,
    },
 

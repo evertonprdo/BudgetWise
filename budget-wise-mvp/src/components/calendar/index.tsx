@@ -1,4 +1,4 @@
-import { FlatList } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { useMemo, useState } from 'react'
 
 import { CalendarDay } from './day'
@@ -27,6 +27,7 @@ export function Calendar({ marketDate, onDayPress }: Props) {
 
       let currDateTimestamp = dayOneTimestamp - timestampDay * weekDay
       let isOutMonthRange = true
+      let isDateDisabledAfterToday = true
 
       const calendarDays = Array.from({ length: calendarLength }, () => {
          const newDate = new Date(currDateTimestamp)
@@ -34,8 +35,14 @@ export function Calendar({ marketDate, onDayPress }: Props) {
             isOutMonthRange = !isOutMonthRange
          }
 
+         let disabled = isOutMonthRange
+
+         if (isDateDisabledAfterToday && !isOutMonthRange) {
+            disabled = newDate.getTime() > new Date().getTime()
+         }
+
          currDateTimestamp += timestampDay
-         return { date: newDate, disabled: isOutMonthRange }
+         return { date: newDate, disabled }
       })
 
       return calendarDays
@@ -46,24 +53,37 @@ export function Calendar({ marketDate, onDayPress }: Props) {
    }
 
    return (
-      <FlatList
-         data={calendarWeeks}
-         keyExtractor={(item) => String(item.date.getTime())}
-         ListHeaderComponent={() => (
-            <CalendarHeader
-               date={currentDate}
-               onMonthChange={setCurrentDate}
-            />
-         )}
-         renderItem={({ item }) => (
-            <CalendarDay
-               date={item.date}
-               disabled={item.disabled}
-               markedDay={marketDate}
-               onDayPress={handleOnDayChange}
-            />
-         )}
-         numColumns={7}
-      />
+      <View>
+         <CalendarHeader
+            date={currentDate}
+            onMonthChange={setCurrentDate}
+         />
+
+         <View style={s.content}>
+            {calendarWeeks.map((item) => (
+               <View style={s.boxDay}>
+                  <CalendarDay
+                     key={item.date.getTime()}
+                     date={item.date}
+                     disabled={item.disabled}
+                     markedDay={marketDate}
+                     onDayPress={handleOnDayChange}
+                  />
+               </View>
+            ))}
+         </View>
+      </View>
    )
 }
+
+const s = StyleSheet.create({
+   content: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between',
+   },
+   boxDay: {
+      width: '14%',
+      aspectRatio: 1,
+   },
+})

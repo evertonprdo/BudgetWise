@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 import { Text, View } from 'react-native'
 
 import { styles } from './styles'
+import { CategoryIcons } from '@/assets/icons/categories'
 import { OptionProps } from '@/components/ui/select'
 import { InputArea, InputDate, Select } from '@/components/ui'
-import { useFormRegister } from '../../form-context/use-form-register'
 
 import { Empty } from '@/assets/icons'
 import { AppDate } from '@/utils/app-date'
-import { CategoryIcons } from '@/assets/icons/categories'
+import { useFormRegister } from '../../form-context/form-register'
 
 export function StepDetails() {
    const { transaction, categories, setTransactionProp } = useFormRegister()

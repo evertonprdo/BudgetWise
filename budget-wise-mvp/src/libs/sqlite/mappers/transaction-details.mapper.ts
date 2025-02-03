@@ -1,10 +1,9 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { UniqueEntityID } from '@/domain/core/entities/unique-entity-id'
 
-import { Money } from '@/core/entities/value-objects/money'
-import { AppDate } from '@/core/entities/value-objects/app-date'
-
-import { TransactionTypes } from '@/core/entities/transaction'
-import { TransactionDetails } from '@/core/entities/value-objects/transaction-details'
+import { Money } from '@/domain/transactions/entities/value-objects/money'
+import { AppDate } from '@/domain/transactions/entities/value-objects/app-date'
+import { TransactionTypes } from '@/domain/transactions/entities/transaction'
+import { TransactionDetails } from '@/domain/transactions/entities/value-objects/transaction-details'
 
 export interface SQLiteTransactionDetails {
    transaction_id: string

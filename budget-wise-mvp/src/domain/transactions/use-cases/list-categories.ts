@@ -1,7 +1,7 @@
-import { Either, right } from '../either'
+import { Either, right } from '@/domain/core/either'
 
-import { Category } from '../entities/category'
 import { CategoriesRepository } from '../repositories/categories.repository'
+import { Category } from '../entities/category'
 
 type ListCategoriesUseCaseResponse = Either<null, { categories: Category[] }>
 

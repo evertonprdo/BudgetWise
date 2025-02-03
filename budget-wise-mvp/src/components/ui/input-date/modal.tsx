@@ -13,6 +13,7 @@ import {
 
 import { X } from '@/assets/icons'
 import { colors, fonts, opacity, sizes } from '@/styles'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 type Props = {
    title?: string
@@ -70,7 +71,7 @@ export function Modal({ visible, children, onRequestClose, ...props }: Props) {
          onRequestClose={onRequestClose}
          {...props}
       >
-         <Animated.View style={bgStyle}>
+         <AnimSafeAreaView style={bgStyle}>
             <Animated.View style={containerStyle}>
                <View style={s.modal}>
                   <View style={s.divider} />
@@ -87,12 +88,13 @@ export function Modal({ visible, children, onRequestClose, ...props }: Props) {
                   {children}
                </View>
             </Animated.View>
-         </Animated.View>
+         </AnimSafeAreaView>
       </RNModal>
    )
 }
 
 const Screen = Dimensions.get('screen')
+const AnimSafeAreaView = Animated.createAnimatedComponent(SafeAreaView)
 
 const fadeConfig = {
    duration: 300,
@@ -117,8 +119,7 @@ const s = StyleSheet.create({
       justifyContent: 'flex-end',
    },
    modal: {
-      paddingTop: 32,
-      paddingBottom: 48,
+      paddingVertical: 32,
       paddingHorizontal: 24,
       borderTopRightRadius: 24,
       borderTopLeftRadius: 24,

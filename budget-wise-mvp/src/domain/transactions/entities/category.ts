@@ -1,6 +1,6 @@
-import { Entity } from './entity'
-import { UniqueEntityID } from './unique-entity-id'
-import { Optional } from '../types/optional'
+import { Entity } from '@/domain/core/entities/entity'
+import { Optional } from '@/domain/core/types/optional'
+import { UniqueEntityID } from '@/domain/core/entities/unique-entity-id'
 
 import { Slug } from './value-objects/slug'
 

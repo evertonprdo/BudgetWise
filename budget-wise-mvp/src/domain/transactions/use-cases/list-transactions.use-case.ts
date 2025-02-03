@@ -1,4 +1,4 @@
-import { Either, right } from '../either'
+import { Either, right } from '@/domain/core/either'
 
 import { TransactionDetails } from '../entities/value-objects/transaction-details'
 import { TransactionsRepository } from '../repositories/transactions.repository'

@@ -83,7 +83,7 @@ export function TransactionItem({
                   icon={category.icon}
                   color={category.color}
                   style={s.icon}
-                  size={20}
+                  size={16}
                />
             </View>
 
@@ -124,8 +124,9 @@ const s = StyleSheet.create({
    container: {
       flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'flex-end',
 
-      padding: 6,
+      padding: 8,
 
       borderWidth: 2,
       borderRadius: sizes.radius.md,
@@ -145,14 +146,14 @@ const s = StyleSheet.create({
    content: {
       flex: 1,
       gap: 8,
-      paddingLeft: 12,
+      paddingLeft: 16,
    },
 
    header: {
       flexDirection: 'row',
       alignItems: 'flex-start',
       justifyContent: 'space-between',
-      gap: 8,
+      gap: 16,
    },
 
    title: {
@@ -164,11 +165,12 @@ const s = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'baseline',
       justifyContent: 'space-between',
-      gap: 8,
+      gap: 16,
+      marginBottom: -4,
    },
 
    amount: {
-      fontFamily: fonts.family.bold,
+      fontFamily: fonts.family.semiBold,
       fontSize: fonts.size.lg,
    },
 
@@ -178,6 +180,6 @@ const s = StyleSheet.create({
    },
 
    icon: {
-      padding: 8,
+      padding: 6,
    },
 })
