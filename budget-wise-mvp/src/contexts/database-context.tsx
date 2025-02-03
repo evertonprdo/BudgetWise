@@ -1,10 +1,4 @@
-import {
-   useState,
-   useEffect,
-   useContext,
-   createContext,
-   PropsWithChildren,
-} from 'react'
+import { useState, useEffect, createContext, PropsWithChildren } from 'react'
 
 import { Database } from '@/libs/sqlite/database'
 
@@ -22,9 +16,9 @@ type ContextProps = {
    repositories: Repositories
 }
 
-const DbContext = createContext<ContextProps | null>(null)
+export const DatabaseContext = createContext<ContextProps | null>(null)
 
-export function DBProvider({ children }: PropsWithChildren) {
+export function DatabaseProvider({ children }: PropsWithChildren) {
    const [repositories, setRepositories] = useState<Repositories | null>(null)
 
    async function initRepositories(db: Database) {
@@ -60,18 +54,8 @@ export function DBProvider({ children }: PropsWithChildren) {
    }
 
    return (
-      <DbContext.Provider value={{ repositories }}>
+      <DatabaseContext.Provider value={{ repositories }}>
          {children}
-      </DbContext.Provider>
+      </DatabaseContext.Provider>
    )
-}
-
-export function useDB() {
-   const db = useContext(DbContext)
-
-   if (db === null) {
-      throw new Error('Missing <DBProvider />')
-   }
-
-   return db
 }

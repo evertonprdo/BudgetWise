@@ -158,7 +158,7 @@ const s = StyleSheet.create({
 
    title: {
       flex: 1,
-      fontFamily: fonts.family.medium,
+      fontFamily: fonts.family.regular,
    },
 
    description: {
@@ -175,7 +175,7 @@ const s = StyleSheet.create({
    },
 
    txtDate: {
-      fontFamily: fonts.family.semiBold,
+      fontFamily: fonts.family.medium,
       fontSize: fonts.size.sm,
    },
 

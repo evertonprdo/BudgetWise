@@ -1,36 +1,32 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import { Alert } from 'react-native'
 
-import { StepValue } from '../form/steps/type-amount'
-import { StepDetails } from '../form/steps/details'
-
-import { useDB } from '@/contexts/db-context'
 import { isValidAmount, isValidDescription } from './validate'
 
 import { Category } from '@/domain/transactions/entities/category'
-import { CreateTransactionUseCase } from '@/domain/transactions/use-cases/create-transaction.use-case'
-import { ListCategoriesUseCase } from '@/domain/transactions/use-cases/list-categories'
 
 import { AppDate } from '@/utils/app-date'
 import { AppMoney } from '@/utils/app-money'
 
-export type TransactionProps = {
+export interface TransactionFormOutput {
    type: 'income' | 'expense'
-   amount?: AppMoney
-   date?: AppDate
-   category?: string
-   description?: string
+   amount: AppMoney
+   date: AppDate
+   category: string
+   description: string
 }
 
+export type TransactionContextProps = Partial<TransactionFormOutput>
+
 type ContextProps = {
-   transaction: TransactionProps
-   setTransactionProp: <T extends keyof TransactionProps>(
+   transaction: TransactionContextProps
+   setTransactionProp: <T extends keyof TransactionContextProps>(
       key: T,
-      value: TransactionProps[T],
+      value: TransactionContextProps[T],
    ) => void
 
    currentStep: FORM_STEPS
-   FormSteps: Array<() => React.JSX.Element>
+   stepsLength: number
 
    stepLeft: () => void
    stepRight: () => void
@@ -39,41 +35,38 @@ type ContextProps = {
 }
 
 type ProviderProps = {
-   transaction?: TransactionProps
+   transaction?: TransactionContextProps
+   categories: Category[]
    children: React.ReactNode
-   onSubmit: () => void
    onRequestCancel: () => void
+   onSubmit: (transaction: TransactionFormOutput) => void
 }
 
-export enum FORM_STEPS {
+export const enum FORM_STEPS {
    TYPE_AND_AMOUNT,
    DETAILS,
 }
 
 export const formRegisterContext = createContext<ContextProps | null>(null)
 
-const FormSteps = [StepValue, StepDetails]
-
 export function FormRegisterProvider({
    children,
    onSubmit,
    onRequestCancel,
    transaction: initialTransaction,
+   categories,
 }: ProviderProps) {
-   const { repositories } = useDB()
-
    const [currentStep, setCurrentStep] = useState<FORM_STEPS>(0)
 
-   const [categories, setCategories] = useState<Category[]>([])
-   const [transaction, setTransaction] = useState<TransactionProps>(
+   const [transaction, setTransaction] = useState<TransactionContextProps>(
       initialTransaction ?? {
          type: 'expense',
       },
    )
 
-   function setTransactionProp<T extends keyof TransactionProps>(
+   function setTransactionProp<T extends keyof TransactionContextProps>(
       key: T,
-      value: TransactionProps[T],
+      value: TransactionContextProps[T],
    ) {
       setTransaction((state) => ({ ...state, [key]: value }))
    }
@@ -102,7 +95,7 @@ export function FormRegisterProvider({
                transaction.category &&
                isValidDescription(transaction.description)
             ) {
-               return await submitTransaction()
+               return onSubmit(transaction as TransactionFormOutput)
             }
             return showWrongFieldAlert(
                !transaction.category
@@ -116,58 +109,6 @@ export function FormRegisterProvider({
       Alert.alert('Form error', message)
    }
 
-   async function submitTransaction() {
-      try {
-         const category = categories.find(
-            (cat) => cat.name.value === transaction.category,
-         )
-
-         if (!category) {
-            throw new Error()
-         }
-
-         const result = await new CreateTransactionUseCase(
-            repositories.transactions,
-            repositories.categories,
-         ).execute({
-            type: transaction.type,
-            amount: transaction.amount!.cents,
-            date: transaction.date!.unix,
-            categoryId: category.id.toString(),
-            description: transaction.description!,
-         })
-
-         if (result.isLeft()) {
-            throw new Error()
-         }
-
-         Alert.alert(
-            'Form',
-            'Your transaction has been successfully registered!',
-            [{ text: 'Go Home', onPress: onSubmit }],
-         )
-      } catch (error) {
-         Alert.alert('Form error', 'Something got wrong try again!')
-         throw error
-      }
-   }
-
-   async function fetchCategories() {
-      const result = await new ListCategoriesUseCase(
-         repositories.categories,
-      ).execute()
-
-      if (result.isLeft()) {
-         throw new Error('Fail to fetch categories')
-      }
-
-      setCategories(result.value.categories)
-   }
-
-   useEffect(() => {
-      fetchCategories()
-   }, [])
-
    return (
       <formRegisterContext.Provider
          value={{
@@ -175,7 +116,7 @@ export function FormRegisterProvider({
             categories,
             setTransactionProp,
             currentStep,
-            FormSteps,
+            stepsLength: FORM_STEPS.DETAILS,
             stepLeft: handleLeft,
             stepRight: handleRight,
          }}

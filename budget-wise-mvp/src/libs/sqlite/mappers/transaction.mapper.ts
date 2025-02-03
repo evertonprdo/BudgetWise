@@ -11,6 +11,7 @@ export interface SQLiteTransaction {
    date: number
    description: string
    category_id: string
+   created_at: number
    updated_at: number | null
 }
 
@@ -39,6 +40,7 @@ export class TransactionMapper {
          cents: transaction.amount.cents,
          description: transaction.description,
          category_id: transaction.categoryId.toString(),
+         created_at: transaction.createdAt.unix,
          updated_at: transaction.updatedAt?.unix ?? null,
       }
    }

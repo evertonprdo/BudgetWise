@@ -1,23 +1,14 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, PropsWithChildren, useEffect, useState } from 'react'
 import { BackHandler } from 'react-native'
 
-import { Index } from '@/screens'
-import { Register } from '@/screens/register'
-
-const Screens = {
-   index: Index,
-   register: Register,
-} as const
+import type { NavigateProps, ScreenNames, Stack } from '@/router'
 
 export const RouterContext = createContext<{
+   currentScreen: ScreenNames
    navigate: (screenName: NavigateProps) => void
 } | null>(null)
 
-type ScreenNames = keyof typeof Screens
-type NavigateProps = ScreenNames | 'back'
-type Stack = ScreenNames[]
-
-export function Router() {
+export function RouterProvider({ children }: PropsWithChildren) {
    const [stack, setStack] = useState<Stack>(['index'])
 
    function navigate(screenName: NavigateProps) {
@@ -43,12 +34,13 @@ export function Router() {
       BackHandler.addEventListener('hardwareBackPress', handleBackPress)
       return () =>
          BackHandler.removeEventListener('hardwareBackPress', handleBackPress)
-   }, [stack])
+   }, [])
 
-   const RenderScreen = Screens[stack[stack.length - 1]]
+   const currentScreen = stack[stack.length - 1]
+
    return (
-      <RouterContext.Provider value={{ navigate }}>
-         <RenderScreen />
+      <RouterContext.Provider value={{ currentScreen, navigate }}>
+         {children}
       </RouterContext.Provider>
    )
 }

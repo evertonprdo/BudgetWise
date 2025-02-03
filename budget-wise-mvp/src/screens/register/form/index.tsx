@@ -5,13 +5,18 @@ import { Button } from '@/components/ui'
 
 import { useFormRegister } from '../form-context/form-register'
 
-export function RegisterForm() {
-   const { currentStep, FormSteps, stepLeft, stepRight } = useFormRegister()
+import { StepValue } from './steps/type-amount'
+import { StepDetails } from './steps/details'
 
-   const FormStep = FormSteps[currentStep]
+const FormSteps = [StepValue, StepDetails]
+
+export function RegisterForm() {
+   const { currentStep, stepLeft, stepRight } = useFormRegister()
 
    const btnLeftText = ['Cancel', 'Back'][currentStep]
    const btnRightText = ['Next', 'Confirm'][currentStep]
+
+   const FormStep = FormSteps[currentStep]
 
    return (
       <ScrollView

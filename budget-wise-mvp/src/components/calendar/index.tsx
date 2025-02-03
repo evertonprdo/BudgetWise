@@ -17,7 +17,7 @@ export function Calendar({ marketDate, onDayPress }: Props) {
          currentDate.getFullYear(),
          currentDate.getMonth(),
          1,
-      ) // YYYY-MM-01T00:00:00.000
+      ) // YYYY-MM-01THH:MM:SS.000
 
       const calendarLength = 42
       const timestampDay = 1000 * 60 * 60 * 24 // 1 day
@@ -61,9 +61,11 @@ export function Calendar({ marketDate, onDayPress }: Props) {
 
          <View style={s.content}>
             {calendarWeeks.map((item) => (
-               <View style={s.boxDay}>
+               <View
+                  key={item.date.getTime()}
+                  style={s.boxDay}
+               >
                   <CalendarDay
-                     key={item.date.getTime()}
                      date={item.date}
                      disabled={item.disabled}
                      markedDay={marketDate}

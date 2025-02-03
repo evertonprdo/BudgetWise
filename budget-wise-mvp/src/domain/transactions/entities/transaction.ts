@@ -3,6 +3,7 @@ import { UniqueEntityID } from '../../core/entities/unique-entity-id'
 
 import { Money } from './value-objects/money'
 import { AppDate } from './value-objects/app-date'
+import { Optional } from '@/domain/core/types/optional'
 
 export type TransactionTypes = 'income' | 'expense'
 
@@ -12,6 +13,7 @@ export interface TransactionProps {
    amount: Money
    categoryId: UniqueEntityID
    description: string
+   createdAt: AppDate
    updatedAt?: AppDate | null
 }
 
@@ -34,6 +36,10 @@ export class Transaction extends Entity<TransactionProps> {
 
    get description() {
       return this.props.description
+   }
+
+   get createdAt() {
+      return this.props.createdAt
    }
 
    get updatedAt() {
@@ -69,7 +75,16 @@ export class Transaction extends Entity<TransactionProps> {
       this.props.updatedAt = AppDate.create(new Date())
    }
 
-   static create(props: TransactionProps, id?: UniqueEntityID) {
-      return new Transaction(props, id)
+   static create(
+      props: Optional<TransactionProps, 'createdAt'>,
+      id?: UniqueEntityID,
+   ) {
+      return new Transaction(
+         {
+            ...props,
+            createdAt: props.createdAt ?? AppDate.create(),
+         },
+         id,
+      )
    }
 }

@@ -15,15 +15,32 @@ export class SQLiteTransactionsRepository implements TransactionsRepository {
    constructor(private db: Database) {}
 
    async create(transaction: Transaction) {
-      const { id, type, cents, date, description, category_id, updated_at } =
-         TransactionMapper.toSQLite(transaction)
+      const {
+         id,
+         type,
+         cents,
+         date,
+         description,
+         category_id,
+         created_at,
+         updated_at,
+      } = TransactionMapper.toSQLite(transaction)
 
       await this.db.conn.runAsync(
          `
-            INSERT INTO ${this.tableName} (id, type, cents, date, description, category_id, updated_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO ${this.tableName} (id, type, cents, date, description, category_id, created_at, updated_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
          `,
-         [id, type, cents, date, description, category_id, updated_at],
+         [
+            id,
+            type,
+            cents,
+            date,
+            description,
+            category_id,
+            created_at,
+            updated_at,
+         ],
       )
    }
 
@@ -40,6 +57,7 @@ export class SQLiteTransactionsRepository implements TransactionsRepository {
                 t.date,
                 t.description AS transaction_description,
                 t.updated_at,
+                t.created_at,
                 c.id AS category_id,
                 c.name AS category_name,
                 c.display_name,
@@ -48,7 +66,7 @@ export class SQLiteTransactionsRepository implements TransactionsRepository {
                 c.description AS category_description
          FROM ${this.tableName} AS t
          JOIN categories AS c ON t.category_id = c.id
-         ORDER BY t.date DESC;
+         ORDER BY t.date DESC, t.created_at DESC;
       `)
 
       return transactions.map(TransactionDetailsMapper.toDomain)

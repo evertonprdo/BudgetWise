@@ -17,6 +17,7 @@ export interface SQLiteTransactionDetails {
    color: string
    icon_key: string
    category_description: string | null
+   created_at: number
    updated_at: number | null
 }
 
@@ -28,6 +29,7 @@ export class TransactionDetailsMapper {
          amount: Money.createFromCents(raw.cents),
          date: AppDate.createFromUnixTimestamp(raw.date),
          description: raw.transaction_description,
+         createdAt: AppDate.createFromUnixTimestamp(raw.created_at),
          updatedAt: raw.updated_at
             ? AppDate.createFromUnixTimestamp(raw.updated_at)
             : null,

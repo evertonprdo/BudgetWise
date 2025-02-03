@@ -11,6 +11,7 @@ export interface TransactionDetailsProps {
    date: AppDate
    amount: Money
    description: string
+   createdAt: AppDate
    updatedAt?: AppDate | null
    category: {
       id: UniqueEntityID

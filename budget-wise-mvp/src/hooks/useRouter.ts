@@ -5,7 +5,7 @@ export function useRouter() {
    const router = useContext(RouterContext)
 
    if (!router) {
-      throw new Error()
+      throw new Error('Missing <RouterProvider/>')
    }
 
    return router

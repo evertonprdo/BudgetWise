@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import { FlatList, StyleSheet, Text } from 'react-native'
+import { Alert, FlatList, StyleSheet, Text } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { colors, fonts } from '@/styles'
-import { useDB } from '@/contexts/db-context'
 import { Button } from '@/components/ui'
 
 import {
@@ -15,10 +14,12 @@ import { Empty } from '@/assets/icons'
 import { CategoryIcons } from '@/assets/icons/categories'
 
 import { useRouter } from '@/hooks/useRouter'
+import { useDatabase } from '@/hooks/useDatabase'
+
 import { ListTransactionsUseCase } from '@/domain/transactions/use-cases/list-transactions.use-case'
 
 export function Index() {
-   const { repositories } = useDB()
+   const { repositories } = useDatabase()
    const { navigate } = useRouter()
 
    const [transactions, setTransactions] = useState<TransactionProps[]>([])
@@ -32,25 +33,25 @@ export function Index() {
          throw new Error('Fail to list transactions')
       }
 
-      setTransactions(
-         result.value.transactions.map<TransactionProps>((item) => ({
-            type: item.type,
-            amount: item.amount.toCurrency(),
-            date: item.date.toShortDate(),
-            description: item.description,
-            category: {
-               color: item.category.color,
-               icon:
-                  CategoryIcons[
-                     item.category.iconKey as keyof typeof CategoryIcons
-                  ] ?? Empty,
-            },
-         })),
-      )
+      return result.value.transactions.map<TransactionProps>((item) => ({
+         type: item.type,
+         amount: item.amount.toCurrency(),
+         date: item.date.toShortDate(),
+         description: item.description,
+         category: {
+            color: item.category.color,
+            icon:
+               CategoryIcons[
+                  item.category.iconKey as keyof typeof CategoryIcons
+               ] ?? Empty,
+         },
+      }))
    }
 
    useEffect(() => {
       listTransactions()
+         .then(setTransactions)
+         .catch((error) => Alert.alert('List error', error))
    }, [navigate])
 
    return (

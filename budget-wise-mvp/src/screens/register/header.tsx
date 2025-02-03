@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 
+import { colors, fonts, opacity, sizes } from '@/styles'
 import { Empty, X } from '@/assets/icons'
 import { CategoryIcons } from '@/assets/icons/categories'
-
-import { colors, fonts, opacity, sizes } from '@/styles'
 import { TransactionItem } from '@/components/transaction-item'
+
 import { useFormRegister } from './form-context/form-register'
 
 type Props = {
@@ -12,7 +12,8 @@ type Props = {
 }
 
 export function RegisterHeader({ onRequestCancel }: Props) {
-   const { categories, transaction, currentStep, FormSteps } = useFormRegister()
+   const { categories, transaction, currentStep, stepsLength } =
+      useFormRegister()
 
    const currentCategory = categories.find(
       ({ name }) => transaction.category === name.value,
@@ -28,6 +29,14 @@ export function RegisterHeader({ onRequestCancel }: Props) {
         }
       : { color: '', icon: Empty }
 
+   const Steps = () =>
+      Array.from({ length: stepsLength }, (_, i) => (
+         <View
+            key={i}
+            style={currentStep === i ? stepFocusedStyle : stepBlurStyle}
+         />
+      ))
+
    return (
       <View style={s.container}>
          <View style={s.options}>
@@ -41,7 +50,7 @@ export function RegisterHeader({ onRequestCancel }: Props) {
          <View style={s.header}>
             <TransactionItem
                transaction={{
-                  type: transaction.type,
+                  type: transaction.type!,
                   amount: transaction.amount?.toCurrency() ?? '',
                   category: currentIcon,
                   date: transaction.date?.toShortDate() ?? '',
@@ -49,14 +58,7 @@ export function RegisterHeader({ onRequestCancel }: Props) {
                }}
             />
             <View style={s.steps}>
-               {FormSteps.map((_, i) => (
-                  <View
-                     key={i}
-                     style={
-                        currentStep === i ? stepFocusedStyle : stepBlurStyle
-                     }
-                  />
-               ))}
+               <Steps />
             </View>
          </View>
       </View>

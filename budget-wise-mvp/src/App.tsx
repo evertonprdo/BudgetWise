@@ -6,8 +6,9 @@ import RubikRegular from '@root/assets/icons/RubikRegular.ttf'
 import RubikMedium from '@root/assets/icons/RubikMedium.ttf'
 import RubikSemiBold from '@root/assets/icons/RubikSemiBold.ttf'
 
-import { Router } from './contexts/router.context'
-import { DBProvider } from './contexts/db-context'
+import { Router } from './router'
+import { RouterProvider } from './contexts/router.context'
+import { DatabaseProvider } from './contexts/database-context'
 
 export default function App() {
    const [loaded] = useFonts({
@@ -22,13 +23,15 @@ export default function App() {
    }
 
    return (
-      <DBProvider>
-         <StatusBar
-            backgroundColor="transparent"
-            translucent
-            style="dark"
-         />
-         <Router />
-      </DBProvider>
+      <DatabaseProvider>
+         <RouterProvider>
+            <StatusBar
+               backgroundColor="transparent"
+               translucent
+               style="dark"
+            />
+            <Router />
+         </RouterProvider>
+      </DatabaseProvider>
    )
 }

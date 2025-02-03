@@ -33,7 +33,7 @@ export function StepValue() {
          <View style={styles.iptWrapper}>
             <Text style={styles.label}>Type</Text>
             <SwitchTransactionType
-               variant={transaction.type}
+               variant={transaction.type!}
                onValueChange={handleOnTypeChange}
             />
          </View>
